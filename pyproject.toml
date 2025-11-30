@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=60.0"]
+
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["lt_clear", "lt_clear.resources"]
+
+[tool.setuptools.package-data]
+lt_clear = ["resources/db/*.db",
+            "resources/pages/templates/*.html",
+            "resources/pages/static/*.css"]
+
+[project]
+name = "lt_clear"
+version = "0.1.0"
+requires-python = ">= 3.6"
+authors = [
+    {name = "Giacomo D'Arcangelo", email = "giacomo.darcangelo@sns.it"}
+]
+description = "A web interface to choose liver transplantation protocols for colorectal cancers"
+readme = "README.md"
+keywords = ["Oncology", "Transplants", "Web interface"]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Programming Language :: Python :: 3',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Topic :: Scientific/Engineering :: Medical Science Apps',
+    'Framework :: Flask'
+]
+dependencies = [
+    "flask>2.1"
+]
+
+[project.scripts]
+lt_clear_app = "lt_clear.app:app.run"

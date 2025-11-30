@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Section 3: Extent of Disease</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-header">
+    LT-CLEAR
+  </div>
+  <div class="container">
+    <h1>Section 3: Extent of Disease</h1>
+    <h2><small>*extent of disease must be assessed in most protocols with PET_CT,<br> abdominal and pelvic MR, colonoscopy and should be within pre-specified<br> limits before listing</small></h2>
+    <form id="extentOfDiseaseForm" action="{{ url_for('section3') }}" method="POST">
+      <!-- (35) Prior Metastatic Disease -->
+      <div class="form-group">
+        <label>Prior extrahepatic metastatic disease:</label>
+        <div class="radio-group">
+          <input type="radio" id="prior_metastatic_yes" name="prior_metastatic" value="yes"
+            {% if responses.get('prior_metastatic') == 'yes' %}checked{% endif %}>
+          <label for="prior_metastatic_yes">Yes</label>
+          <input type="radio" id="prior_metastatic_no" name="prior_metastatic" value="no"
+            {% if responses.get('prior_metastatic') == 'no' %}checked{% endif %}>
+          <label for="prior_metastatic_no">No</label>
+        </div>
+      </div>
+
+      <!-- (36) Extrahepatic Metastatic Disease Type and (37) Timing of Resection -->
+      <div class="form-group {% if responses.get('prior_metastatic') != 'yes' %}hidden{% endif %}" id="extrahepatic_and_timing_group">
+        <label>Type of extrahepatic metastatic disease:</label>
+        <div class="radio-group">
+          <input type="radio" id="lung_lesion" name="metastatic_type" value="resected_lung_lesion"
+            {% if responses.get('metastatic_type') == 'resected_lung_lesion' %}checked{% endif %}>
+          <label for="lung_lesion">Resected lung lesion</label>
+          <input type="radio" id="liver_lesion" name="metastatic_type" value="resected_liver_lesion"
+            {% if responses.get('metastatic_type') == 'resected_liver_lesion' %}checked{% endif %}>
+          <label for="liver_lesion">Resected hilar lymph nodes</label>
+          <input type="radio" id="metastatic_other" name="metastatic_type" value="other"
+            {% if responses.get('metastatic_type') == 'other' %}checked{% endif %}>
+          <label for="metastatic_other">Other (resected)</label>
+        </div>
+
+        <div class="form-group">
+          <label for="timing_resection">Timing of resection of extrahepatic metastatic disease:</label>
+          <select id="timing_resection" name="timing_resection">
+            <option value="<3 months" {% if responses.get('timing_resection') == '<3 months' %}selected{% endif %}>&lt;3 months</option>
+            <option value="3 months - 6 months" {% if responses.get('timing_resection') == '3 months - 6 months' %}selected{% endif %}>3 months - 6 months</option>
+            <option value="6 months - 1 year" {% if responses.get('timing_resection') == '6 months - 1 year' %}selected{% endif %}>6 months - 1 year</option>
+            <option value="1 year - 2 years" {% if responses.get('timing_resection') == '1 year - 2 years' %}selected{% endif %}>1 year - 2 years</option>
+            <option value=">2 years" {% if responses.get('timing_resection') == '>2 years' %}selected{% endif %}>&gt;2 years</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- (38) Local Recurrence -->
+      <div class="form-group">
+        <label>Local recurrence of primary CRC</label>
+        <div class="radio-group">
+          <input type="radio" id="local_recurrence_no" name="local_recurrence" value="no"
+            {% if responses.get('local_recurrence') == 'no' %}checked{% endif %}>
+          <label for="local_recurrence_no">No</label>
+          <input type="radio" id="local_recurrence_yes_res_2_years" name="local_recurrence" value="yes_res_2_years"
+            {% if responses.get('local_recurrence') == 'yes_res_2_years' %}checked{% endif %}>
+          <label for="local_recurrence_yes_res_2_years">Yes, resected &gt;2 years</label>
+          <input type="radio" id="local_recurrence_yes_not_res_2_years" name="local_recurrence" value="yes_not_res_2_years"
+            {% if responses.get('local_recurrence') == 'yes_not_res_2_years' %}checked{% endif %}>
+          <label for="local_recurrence_yes_not_res_2_years">Yes, not resected or resected &lt;2 years</label>
+        </div>
+      </div>
+
+      <!-- (39) Number of Hepatic Lesions Before Chemo -->
+      <div class="form-group">
+        <label for="num_hepatic_lesions_before_chemo">Number of hepatic lesions before chemo:</label>
+        <div class="radio-group">
+          <input type="radio" id="num_hepatic_lesions_before_chemo_lt20" name="num_hepatic_lesions_before_chemo" value="<20" {% if responses.get('num_hepatic_lesions_before_chemo') == '<20' %}checked{% endif %}>
+          <label for="num_hepatic_lesions_before_chemo_lt20">&lt;20</label>
+          <input type="radio" id="num_hepatic_lesions_before_chemo_gt20" name="num_hepatic_lesions_before_chemo" value=">20" {% if responses.get('num_hepatic_lesions_before_chemo') == '>20' %}checked{% endif %}>
+          <label for="num_hepatic_lesions_before_chemo_gt20">&gt;20</label>
+        </div>
+      </div>
+
+      <!-- (40) Dimensions of Largest Hepatic Lesion Before Chemo -->
+      <div class="form-group">
+        <label for="dim_largest_lesion_before_chemo">Dimensions of largest hepatic lesion before chemo (cm):</label>
+        <div class="radio-group">
+          <input type="radio" id="dim_largest_lesion_before_chemo_lt10" name="dim_largest_lesion_before_chemo" value="<10" {% if responses.get('dim_largest_lesion_before_chemo') == '<10' %}checked{% endif %}>
+          <label for="dim_largest_lesion_before_chemo_lt10">&lt;10 cm</label>
+          <input type="radio" id="dim_largest_lesion_before_chemo_gt10" name="dim_largest_lesion_before_chemo" value=">10" {% if responses.get('dim_largest_lesion_before_chemo') == '>10' %}checked{% endif %}>
+          <label for="dim_largest_lesion_before_chemo_gt10">&gt;10 cm</label>
+        </div>
+      </div>
+
+      <!-- (41) Dimensions of Largest Hepatic Lesion Current -->
+      <div class="form-group">
+        <label for="dim_largest_lesion_current">Dimensions of largest hepatic lesion current (cm):</label>
+        <select id="dim_largest_lesion_current" name="dim_largest_lesion_current">
+          <option value="<5" {% if responses.get('dim_largest_lesion_current') == '<5' %}selected{% endif %}>&lt;5 cm</option>
+          <option value="5-5.5" {% if responses.get('dim_largest_lesion_current') == '5-5.5' %}selected{% endif %}>5-5.5 cm</option>
+          <option value="5.5-10" {% if responses.get('dim_largest_lesion_current') == '5.5-10' %}selected{% endif %}>5.5-10 cm</option>
+          <option value=">10" {% if responses.get('dim_largest_lesion_current') == '>10' %}selected{% endif %}>&gt;10 cm</option>
+        </select>
+      </div>
+
+      <!-- (42) Major Vascular Invasion -->
+      <div class="form-group">
+        <label>Major vascular invasion:</label>
+        <div class="radio-group">
+          <input type="radio" id="vascular_invasion_yes" name="vascular_invasion" value="yes"
+            {% if responses.get('vascular_invasion') == 'yes' %}checked{% endif %}>
+          <label for="vascular_invasion_yes">Yes</label>
+          <input type="radio" id="vascular_invasion_no" name="vascular_invasion" value="no"
+            {% if responses.get('vascular_invasion') == 'no' %}checked{% endif %}>
+          <label for="vascular_invasion_no">No</label>
+        </div>
+      </div>
+
+      <!-- (43) Diaphragmatic Invasion -->
+      <div class="form-group">
+        <label>Diaphragmatic invasion:</label>
+        <div class="radio-group">
+          <input type="radio" id="diaphragmatic_invasion_yes" name="diaphragmatic_invasion" value="yes"
+            {% if responses.get('diaphragmatic_invasion') == 'yes' %}checked{% endif %}>
+          <label for="diaphragmatic_invasion_yes">Yes</label>
+          <input type="radio" id="diaphragmatic_invasion_no" name="diaphragmatic_invasion" value="no"
+            {% if responses.get('diaphragmatic_invasion') == 'no' %}checked{% endif %}>
+          <label for="diaphragmatic_invasion_no">No</label>
+        </div>
+      </div>
+
+      <!-- (44) Extrahepatic Metastatic Disease -->
+      <div class="form-group">
+        <label>Extrahepatic metastatic disease:</label>
+        <div class="radio-group">
+          <input type="radio" id="extrahepatic_yes" name="extrahepatic" value="yes"
+            {% if responses.get('extrahepatic') == 'yes' %}checked{% endif %}>
+          <label for="extrahepatic_yes">Yes</label>
+          <input type="radio" id="extrahepatic_no" name="extrahepatic" value="no"
+            {% if responses.get('extrahepatic') == 'no' %}checked{% endif %}>
+          <label for="extrahepatic_no">No</label>
+        </div>
+      </div>
+      
+
+      <!-- (45) Extrahepatic Metastatic Disease Type -->
+      <div class="form-group {% if responses.get('extrahepatic') != 'yes' %}hidden{% endif %}" id="extrahepatic_type_subgroup">
+        <label>Extrahepatic metastatic disease type:</label>
+        <div class="radio-group">
+          <input type="radio" id="extrahepatic_type_resectable" name="extrahepatic_type" value="resectable"
+            {% if responses.get('extrahepatic_type') == 'resectable' %}checked{% endif %}>
+          <label for="extrahepatic_type_resectable">Resectable lung lesion</label>
+          <input type="radio" id="extrahepatic_type_other" name="extrahepatic_type" value="other"
+            {% if responses.get('extrahepatic_type') == 'other' %}checked{% endif %}>
+          <label for="extrahepatic_type_other">Other</label>
+        </div>
+      </div>
+
+      <!-- (46) Resectable Lung Lesion Number and (47) Dimensions -->
+      <div class="form-group {% if not (responses.get('extrahepatic') == 'yes' and responses.get('extrahepatic_type') == 'resectable') %}hidden{% endif %}" id="resectable_lung_group">
+        <label for="resectable_lung_number">Resectable lung lesion number:</label>
+        <input type="number" id="resectable_lung_number" name="resectable_lung_number" value="{{ responses.get('resectable_lung_number', '') }}">
+        <label for="resectable_lung_dimensions">Resectable lung lesion dimensions (mm):</label>
+        <input type="number" id="resectable_lung_dimensions" name="resectable_lung_dimensions" value="{{ responses.get('resectable_lung_dimensions', '') }}">
+      </div>
+
+      <!-- Submit Buttons -->
+      <br><br>
+      <div style="display: flex; justify-content: space-between; gap: 20px; width: 100%;">
+        <button type="button" class="btn-back" onclick="window.location.href='{{ url_for('section2') }}'">Back</button>
+        <button type="submit" class="btn-next">Next</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function clearFieldsInGroup(groupElement) {
+      if (!groupElement) return;
+      var inputs = groupElement.querySelectorAll('input, select, textarea');
+      inputs.forEach(function(input) {
+        if (input.type === 'radio' || input.type === 'checkbox') {
+          input.checked = false;
+        } else {
+          input.value = '';
+        }
+      });
+    }
+
+    function handlePriorMetastaticVisibility() {
+      var priorMetastaticYes = document.getElementById('prior_metastatic_yes').checked;
+      var extrahepaticAndTimingGroup = document.getElementById('extrahepatic_and_timing_group');
+      if (priorMetastaticYes) {
+        extrahepaticAndTimingGroup.classList.remove('hidden');
+      } else {
+        extrahepaticAndTimingGroup.classList.add('hidden');
+        clearFieldsInGroup(extrahepaticAndTimingGroup);
+      }
+    }
+
+    function handleExtrahepaticVisibility() {
+      var extrahepaticYes = document.getElementById('extrahepatic_yes').checked;
+      var extrahepaticSubgroup = document.getElementById('extrahepatic_type_subgroup');
+      var resectableLungGroup = document.getElementById('resectable_lung_group');
+      var extrahepaticTypeSelected = document.querySelector('input[name="extrahepatic_type"]:checked');
+
+      if (extrahepaticYes) {
+        extrahepaticSubgroup.classList.remove('hidden');
+      } else {
+        extrahepaticSubgroup.classList.add('hidden');
+        clearFieldsInGroup(extrahepaticSubgroup);
+        resectableLungGroup.classList.add('hidden');
+        clearFieldsInGroup(resectableLungGroup);
+      }
+
+      if (extrahepaticTypeSelected && extrahepaticTypeSelected.value === 'resectable') {
+        resectableLungGroup.classList.remove('hidden');
+      } else {
+        resectableLungGroup.classList.add('hidden');
+        clearFieldsInGroup(resectableLungGroup);
+      }
+    }
+
+    function handleFieldVisibility() {
+      handlePriorMetastaticVisibility();
+      handleExtrahepaticVisibility();
+    }
+
+    document.querySelectorAll('input[name="prior_metastatic"]').forEach(function(input) {
+      input.addEventListener('change', handleFieldVisibility);
+    });
+    document.querySelectorAll('input[name="extrahepatic"], input[name="extrahepatic_type"]').forEach(function(input) {
+      input.addEventListener('change', handleFieldVisibility);
+    });
+
+    window.onload = handleFieldVisibility;
+  </script>
+
+  <footer>
+    2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+  </footer>
+</body>
+</html>

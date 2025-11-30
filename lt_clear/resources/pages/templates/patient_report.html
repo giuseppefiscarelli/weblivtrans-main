@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+<div class="card-header">
+        LT-CLEAR
+</div>
+  <div class="container report-container">
+        <h1>Patient Report<br> </h1>
+      <div class="card-body">
+        <div class="card-header">
+          Patient informations:
+        </div>          <dl>
+            <div class="report-section">
+
+              {% for field_info in fields_data %}
+              <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                <dt style="font-weight: bold; margin-right: 5px; margin: 0;">{{ field_info.name.replace('_', ' ').title() }}:</dt>
+                <dd style="margin-left: 10px; margin: 0;">{{ responses.get(field_info.name, 'N/A') }}</dd>
+              </div>
+            {% endfor %}
+            
+          </dl>
+        </div>
+        <!-- Matched Protocols Section -->
+        <div class="report-section">
+
+          {% if matched_protocols and matched_protocols != [('No protocols are adoptable for the patient.', '')] %}
+          {% if success_message %}
+            <div class="success-message">
+              {{ success_message }}
+            </div>
+          {% endif %}
+          <div class="card-header">
+            The patient <strong>can be included</strong> in the following protocols:
+          </div>
+          <ul class="protocol-result">
+            {% for protocol, details in matched_protocols %}
+              <li>
+                <p class="protocol-name">{{ protocol }}</p>
+                {% if details %}
+                  <ul class="protocol-details">
+                    {% for detail in details %}
+                      <li>* {{ detail|urlize }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>The patient <strong>cannot be included</strong> in any protocols.</p>
+        {% endif %}
+      </div>
+    </div>
+        <div class="buttons">
+          <a href="{{ url_for('restart') }}" class="button">Restart: New Patient</a>
+        </div>
+      </div>
+    </div>
+    <footer>
+      2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+    </footer>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section 2: The Primary Cancer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<div class="card-header">
+    LT-CLEAR
+</div>
+<body>
+    <div class="container">
+        <h1>Section 2: The Primary Cancer</h1>
+        <form id="primaryCancerForm" action="{{ url_for('section2') }}" method="POST">
+            
+            <!-- (23) Time elapsed from primary CRC diagnosis (months) -->
+            <div class="form-group" id="crc_diagnosis_time_group">
+                <label for="crc_diagnosis_time">Time elapsed from primary colorectar cancer diagnosis (months):</label>
+                <select id="crc_diagnosis_time" name="crc_diagnosis_time">
+                    <option value="<3" {% if responses.get('crc_diagnosis_time') == '<3' %}selected{% endif %}>&lt;3</option>
+                    <option value="3-12" {% if responses.get('crc_diagnosis_time') == '3-12' %}selected{% endif %}>3-12</option>
+                    <option value="12-24" {% if responses.get('crc_diagnosis_time') == '12-24' %}selected{% endif %}>12-24</option>
+                    <option value=">24" {% if responses.get('crc_diagnosis_time') == '>24' %}selected{% endif %}>&gt;24</option>
+                </select>
+            </div>  
+            
+            <!-- (24) Time elapsed from primary CRC resection (months) -->
+            <div class="form-group" id="crc_resection_time_group">
+                <label for="crc_resection_time">Time elapsed from primary colorectar cancer resection (months):</label>
+                <select id="crc_resection_time" name="crc_resection_time">
+                    <option value="<3" {% if responses.get('crc_resection_time') == '<3' %}selected{% endif %}>&lt;3</option>
+                    <option value="3-6" {% if responses.get('crc_resection_time') == '3-6' %}selected{% endif %}>3-6</option>
+                    <option value="6-10" {% if responses.get('crc_resection_time') == '6-10' %}selected{% endif %}>6-10</option>
+                    <option value="10-12" {% if responses.get('crc_resection_time') == '10-12' %}selected{% endif %}>10-12</option>
+                    <option value="12-24" {% if responses.get('crc_resection_time') == '12-24' %}selected{% endif %}>12-24</option>
+                    <option value=">24" {% if responses.get('crc_resection_time') == '>24' %}selected{% endif %}>&gt;24</option>
+                </select>
+            </div>
+
+            <!-- (25) LOCATION -->
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <select id="location" name="location">
+                    <option value="right_colon" {% if responses.get('location') == 'right_colon' %}selected{% endif %}>Right colon</option>
+                    <option value="transverse_left_sigmoid_colon" {% if responses.get('location') == 'transverse_left_sigmoid_colon' %}selected{% endif %}>Transverse/left/sigmoid colon or intraperitoneal rectum</option>
+                    <option value="extraperitoneal_rectum" {% if responses.get('location') == 'extraperitoneal_rectum' %}selected{% endif %}>Extraperitoneal rectum</option>
+                </select>
+            </div>
+
+            <!-- (26) Rectal Cancer Resection Margin -->
+            <div class="form-group {% if not show_resection_margin %}hidden{% endif %}" id="rectal_cancer_margin_group">
+                <label for="resection_margin">Rectal cancer resection margin (mm):</label>
+                <select id="resection_margin" name="resection_margin">
+                    <option value="<1" {% if responses.get('resection_margin') == '<1' %}selected{% endif %}>&lt;1 mm</option>
+                    <option value="1-2" {% if responses.get('resection_margin') == '1-2' %}selected{% endif %}>1-2 mm</option>
+                    <option value="2-20" {% if responses.get('resection_margin') == '2-20' %}selected{% endif %}>2-20 mm</option>
+                    <option value=">20" {% if responses.get('resection_margin') == '>20' %}selected{% endif %}>&gt;20 mm</option>
+                </select>
+            </div>
+
+            <!-- (27) Radical High-Standard Oncological Resection -->
+            <div class="form-group">
+                <label>Radical high-standard oncological resection:</label>
+                <div class="radio-group">
+                    <input type="radio" id="resection_yes" name="radical_resection" value="yes" {% if responses.get('radical_resection') == 'yes' %}checked{% endif %}>
+                    <label for="resection_yes">Yes</label>
+                    <input type="radio" id="resection_no" name="radical_resection" value="no" {% if responses.get('radical_resection') == 'no' %}checked{% endif %}>
+                    <label for="resection_no">No</label>
+                </div>
+            </div>
+
+            <!-- (28) Received Standard Treatment -->
+            <div class="form-group">
+                <label>Received standard treatment according to guidelines:</label>
+                <div class="radio-group">
+                    <input type="radio" id="treatment_yes" name="standard_treatment" value="yes" {% if responses.get('standard_treatment') == 'yes' %}checked{% endif %}>
+                    <label for="treatment_yes">Yes</label>
+                    <input type="radio" id="treatment_no" name="standard_treatment" value="no" {% if responses.get('standard_treatment') == 'no' %}checked{% endif %}>
+                    <label for="treatment_no">No</label>
+                </div>
+            </div>
+
+            <!-- (29) Histology T -->
+            <div class="form-group">
+                <label>Histology: T</label>
+                <div class="radio-group">
+                    <input type="radio" id="histology_t1" name="histology_t" value="1" {% if responses.get('histology_t') == '1' %}checked{% endif %}>
+                    <label for="histology_t1">1</label>
+                    <input type="radio" id="histology_t2" name="histology_t" value="2" {% if responses.get('histology_t') == '2' %}checked{% endif %}>
+                    <label for="histology_t2">2</label>
+                    <input type="radio" id="histology_t3" name="histology_t" value="3" {% if responses.get('histology_t') == '3' %}checked{% endif %}>
+                    <label for="histology_t3">3</label>
+                    <input type="radio" id="histology_t4a" name="histology_t" value="4a" {% if responses.get('histology_t') == '4a' %}checked{% endif %}>
+                    <label for="histology_t4a">4a</label>
+                    <input type="radio" id="histology_t4b" name="histology_t" value="4b" {% if responses.get('histology_t') == '4b' %}checked{% endif %}>
+                    <label for="histology_t4b">4b</label>
+                </div>
+            </div>
+
+            <!-- (30) Histology N -->
+            <div class="form-group">
+                <label>Histology: N</label>
+                <div class="radio-group">
+                    <input type="radio" id="histology_n0" name="histology_n" value="0" {% if responses.get('histology_n') == '0' %}checked{% endif %}>
+                    <label for="histology_n0">0</label>
+                    <input type="radio" id="histology_n1a" name="histology_n" value="1a" {% if responses.get('histology_n') == '1a' %}checked{% endif %}>
+                    <label for="histology_n1a">1a</label>
+                    <input type="radio" id="histology_n1b" name="histology_n" value="1b" {% if responses.get('histology_n') == '1b' %}checked{% endif %}>
+                    <label for="histology_n1b">1b</label>
+                    <input type="radio" id="histology_n1c" name="histology_n" value="1c" {% if responses.get('histology_n') == '1c' %}checked{% endif %}>
+                    <label for="histology_n1c">1c</label>
+                    <input type="radio" id="histology_n2a" name="histology_n" value="2a" {% if responses.get('histology_n') == '2a' %}checked{% endif %}>
+                    <label for="histology_n2a">2a</label>
+                    <input type="radio" id="histology_n2b" name="histology_n" value="2b" {% if responses.get('histology_n') == '2b' %}checked{% endif %}>
+                    <label for="histology_n2b">2b</label>
+                </div>
+            </div>
+
+            <!-- (31) Histology R -->
+            <div class="form-group">
+                <label>Histology: R</label>
+                <div class="radio-group">
+                    <input type="radio" id="histology_r0" name="histology_r" value="0" {% if responses.get('histology_r') == '0' %}checked{% endif %}>
+                    <label for="histology_r0">0</label>
+                    <input type="radio" id="histology_r1" name="histology_r" value=">0" {% if responses.get('histology_r') == '>0' %}checked{% endif %}>
+                    <label for="histology_r1">&gt;0</label>
+                </div>
+            </div>
+
+            <!-- (32) BRAF -->
+            <div class="form-group">
+                <label>BRAF:</label>
+                <div class="radio-group">
+                    <input type="radio" id="braf_wild" name="braf" value="wild_type" {% if responses.get('braf') == 'wild_type' %}checked{% endif %}>
+                    <label for="braf_wild">Wild type</label>
+                    <input type="radio" id="braf_mutated" name="braf" value="mutated" {% if responses.get('braf') == 'mutated' %}checked{% endif %}>
+                    <label for="braf_mutated">Mutated</label>
+                </div>
+            </div>
+
+            <!-- (33) RAS -->
+            <div class="form-group">
+                <label>RAS:</label>
+                <div class="radio-group">
+                    <input type="radio" id="ras_wild" name="ras" value="wild_type" {% if responses.get('ras') == 'wild_type' %}checked{% endif %}>
+                    <label for="ras_wild">Wild type</label>
+                    <input type="radio" id="ras_mutated" name="ras" value="mutated" {% if responses.get('ras') == 'mutated' %}checked{% endif %}>
+                    <label for="ras_mutated">Mutated</label>
+                </div>
+            </div>
+
+            <!-- (34) Microsatellite -->
+            <div class="form-group">
+                <label>Microsatellite:</label>
+                <div class="radio-group">
+                    <input type="radio" id="microsatellite_stable" name="microsatellite" value="stable" {% if responses.get('microsatellite') == 'stable' %}checked{% endif %}>
+                    <label for="microsatellite_stable">Stable</label>
+                    <input type="radio" id="microsatellite_instability" name="microsatellite" value="microsatellite_instability" {% if responses.get('microsatellite') == 'microsatellite_instability' %}checked{% endif %}>
+                    <label for="microsatellite_instability">Microsatellite instability</label>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <br><br>
+            <div style="display: flex; justify-content: space-between; gap: 20px; width: 100%;">
+                <button type="button" class="btn-back" onclick="window.location.href='{{ url_for('section1') }}'">Back</button>
+                <button type="submit" class="btn-next">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    // Function to show/hide the "Rectal cancer resection margin" field based on location
+    function handleLocationChange() {
+        var location = document.getElementById('location').value;
+        var rectalMarginGroup = document.getElementById('rectal_cancer_margin_group');
+
+        // Show the field only if the location is "extraperitoneal_rectum"
+        if (location === 'extraperitoneal_rectum') {
+            rectalMarginGroup.classList.remove('hidden');
+        } else {
+            rectalMarginGroup.classList.add('hidden');
+        }
+    }
+
+    window.onload = function () {
+        document.getElementById('location').addEventListener('change', handleLocationChange);
+        // Initialize the form with the correct field visibility
+        handleLocationChange();
+    };
+    </script>
+
+    <footer>
+        2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+    </footer>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section 1: The Patient</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-header">
+        LT-CLEAR
+    </div>
+
+    <div class="container">
+        <h1>Section 1: The Patient</h1>
+        <form action="{{ url_for('section1') }}" method="POST">
+            <!-- (1) Age field  -->
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" value="{{ responses.get('age', '') }}">
+            </div>
+
+            <!-- (2) Modified ECOG field -->
+            <div class="form-group">
+                <label for="ecog">ECOG:</label>
+                <div class="radio-group">
+                    <input type="radio" id="ecog0" name="ecog" value="0" {% if responses.get('ecog') == '0' %}checked{% endif %}>
+                    <label for="ecog0">0</label>
+                    <input type="radio" id="ecog1" name="ecog" value="1" {% if responses.get('ecog') == '1' %}checked{% endif %}>
+                    <label for="ecog1">1</label>
+                    <input type="radio" id="ecog2" name="ecog" value="2" {% if responses.get('ecog') == '2' %}checked{% endif %}>
+                    <label for="ecog2">2</label>
+                    <input type="radio" id="ecog_gt2" name="ecog" value=">2" {% if responses.get('ecog') == '>2' %}checked{% endif %}>
+                    <label for="ecog_gt2">&gt;2</label>
+                </div>
+            </div>
+            
+            <!-- (3) BMI -->
+            <div class="form-group">
+                <label for="bmi">BMI:</label>
+                <div class="radio-group">
+                    <input type="radio" id="bmi_gt30" name="bmi" value=">30" {% if responses.get('bmi') == '>30' %}checked{% endif %}>
+                    <label for="bmi_gt30">&gt;30</label>
+                    <input type="radio" id="bmi_lt30" name="bmi" value="<30" {% if responses.get('bmi') == '<30' %}checked{% endif %}>
+                    <label for="bmi_lt30">&lt;30</label>
+                </div>
+            </div>
+
+            <!-- (4) HBV field: "CHRONIC HBV INFECTION" -->
+            <div class="form-group">
+                <label>Chronic HBV infection:</label>
+                <div class="radio-group">
+                    <input type="radio" id="hbv_yes" name="hbv" value="yes" {% if responses.get('hbv') == 'yes' %}checked{% endif %}>
+                    <label for="hbv_yes">Yes</label>
+                    <input type="radio" id="hbv_no" name="hbv" value="no" {% if responses.get('hbv') == 'no' %}checked{% endif %}>
+                    <label for="hbv_no">No</label>
+                </div>
+            </div>
+
+            <!-- (5) HCV field -->
+            <div class="form-group">
+                <label>HCV:</label>
+                <div class="radio-group">
+                    <input type="radio" id="hcv_positive" name="hcv" value="positive" {% if responses.get('hcv') == 'positive' %}checked{% endif %}>
+                    <label for="hcv_positive">Positive</label>
+                    <input type="radio" id="hcv_negative" name="hcv" value="negative" {% if responses.get('hcv') == 'negative' %}checked{% endif %}>
+                    <label for="hcv_negative">Negative</label>
+                </div>
+            </div>
+
+            <!-- (6) HIV field -->
+            <div class="form-group">
+                <label>HIV:</label>
+                <div class="radio-group">
+                    <input type="radio" id="hiv_positive" name="hiv" value="positive" {% if responses.get('hiv') == 'positive' %}checked{% endif %}>
+                    <label for="hiv_positive">Positive</label>
+                    <input type="radio" id="hiv_negative" name="hiv" value="negative" {% if responses.get('hiv') == 'negative' %}checked{% endif %}>
+                    <label for="hiv_negative">Negative</label>
+                </div>
+            </div>
+
+            <!-- (7) Weight loss field -->
+            <div class="form-group">
+                <label>Weight loss last 6 months:</label>
+                <div class="radio-group">
+                    <input type="radio" id="weight_loss_lt_10" name="weight_loss" value="<10%" {% if responses.get('weight_loss') == '<10%' %}checked{% endif %}>
+                    <label for="weight_loss_lt_10">&lt;10%</label>
+                    <input type="radio" id="weight_loss_gt_10" name="weight_loss" value=">10%" {% if responses.get('weight_loss') == '>10%' %}checked{% endif %}>
+                    <label for="weight_loss_gt_10">&gt;10%</label>
+                </div>
+            </div>
+
+            <!-- (8) Other malignancies field -->
+            <div class="form-group">
+                <label>Other malignancies:</label>
+                <div class="radio-group">
+                    <input type="radio" id="other_malignancies_yes" name="other_malignancies" value="yes" {% if responses.get('other_malignancies') == 'yes' %}checked{% endif %}>
+                    <label for="other_malignancies_yes">Yes</label>
+                    <input type="radio" id="other_malignancies_no" name="other_malignancies" value="no" {% if responses.get('other_malignancies') == 'no' %}checked{% endif %}>
+                    <label for="other_malignancies_no">No</label>
+                </div>
+            </div>
+
+            <!-- (9) Other malignancies details -->
+            <div id="other_malignancies_details" class="{% if responses.get('other_malignancies') != 'yes' %}hidden{% endif %}">
+                <!-- Other malignancies timing -->
+                <div class="form-group">
+                    <label>Other malignancies timing:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="timing_1_5years" name="malignancies_timing" value="1-5years" {% if responses.get('malignancies_timing') == '1-5years' %}checked{% endif %}>
+                        <label for="timing_1_5years">1-5 years</label>
+                        <input type="radio" id="timing_gt_5years" name="malignancies_timing" value=">5 years" {% if responses.get('malignancies_timing') == '>5 years' or not responses.get('malignancies_timing') %}checked{% endif %}>
+                        <label for="timing_gt_5years">&gt;5 years</label>
+                    </div>
+                </div>
+
+                <!-- (10) Other malignancies type -->
+                <div class="form-group">
+                    <label>Other malignancies type:</label>
+                    <p><em>*low-risk malignancies differ among protocols inclusion criteria but generally include: non-melanoma skin cancer, in-situ cervical carcinoma, superficial bladder tumors, low-gleason prostate tumors, early papillary thyroid cancer</em></p>
+                    <div class="radio-group">
+                        <input type="radio" id="low_risk" name="malignancies_type" value="low-risk" {% if responses.get('malignancies_type') == 'low-risk' or not responses.get('malignancies_type') %}checked{% endif %}>
+                        <label for="low_risk">Low risk</label>
+                        <input type="radio" id="high_risk" name="malignancies_type" value="high-risk" {% if responses.get('malignancies_type') == 'high-risk' %}checked{% endif %}>
+                        <label for="high_risk">Intermediate/High risk</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- (11) Hb  g/dL -->
+            <div class="form-group">
+                <label for="hb">Hb <span class="unit-label">(g/dL)</span>:</label>
+                <select id="hb" name="hb">
+                    <option value="<7.5" {% if responses.get('hb') == '<7.5' %}selected{% endif %}>&lt;7.5</option>
+                    <option value="7.5-9" {% if responses.get('hb') == '7.5-9' %}selected{% endif %}>7.5-9</option>
+                    <option value="9-10" {% if responses.get('hb') == '9-10' %}selected{% endif %}>9-10</option>
+                    <option value="10-12" {% if responses.get('hb') == '10-12' %}selected{% endif %}>10-12</option>
+                    <option value=">12" {% if responses.get('hb') == '>12' %}selected{% endif %}>&gt;12</option>
+                </select>
+            </div>
+
+            <!-- (12) WBC -->
+            <div class="form-group">
+                <label for="wbc">WBC <span class="unit-label">(10³/µL)</span>:</label>
+                <select id="wbc" name="wbc">
+                    <option value="<2500" {% if responses.get('wbc') == '<2500' %}selected{% endif %}>&lt;2500</option>
+                    <option value="2500-3000" {% if responses.get('wbc') == '2500-3000' %}selected{% endif %}>2500-3000</option>
+                    <option value="3000-4000" {% if responses.get('wbc') == '3000-4000' %}selected{% endif %}>3000-4000</option>
+                    <option value=">4000" {% if responses.get('wbc') == '>4000' %}selected{% endif %}>&gt;4000</option>
+                </select>
+            </div>
+
+            <!-- (13) Neutrophils -->
+            <div class="form-group">
+                <label for="neutrophils">Neutrophils <span class="unit-label">(1/µL)</span>:</label>
+                <select id="neutrophils" name="neutrophils">
+                    <option value="<1000" {% if responses.get('neutrophils') == '<1000' %}selected{% endif %}>&lt;1000</option>
+                    <option value="1000-1500" {% if responses.get('neutrophils') == '1000-1500' %}selected{% endif %}>1000-1500</option>
+                    <option value="1500-2500" {% if responses.get('neutrophils') == '1500-2500' %}selected{% endif %}>1500-2500</option>
+                    <option value=">2500" {% if responses.get('neutrophils') == '>2500' %}selected{% endif %}>&gt;2500</option>
+                </select>
+            </div>
+
+            <!-- (14) Platelets cells/µL-->
+            <div class="form-group">
+                <label for="platelets">Platelets <span class="unit-label">(cells/µL)</span>:</label>
+                <select id="platelets" name="platelets">
+                    <option value="<30.000" {% if responses.get('platelets') == '<30.000' %}selected{% endif %}>&lt;30.000</option>
+                    <option value="30.000-60.000" {% if responses.get('platelets') == '30.000-60.000' %}selected{% endif %}>30.000-60.000</option>
+                    <option value="60.000-75.000" {% if responses.get('platelets') == '60.000-75.000' %}selected{% endif %}>60.000-75.000</option>
+                    <option value="75.000-80.000" {% if responses.get('platelets') == '75.000-80.000' %}selected{% endif %}>75.000-80.000</option>
+                    <option value="80.000-100.000" {% if responses.get('platelets') == '80.000-100.000' %}selected{% endif %}>80.000-100.000</option>
+                    <option value="100.000-150.000" {% if responses.get('platelets') == '100.000-150.000' %}selected{% endif %}>100.000-150.000</option>
+                    <option value=">150.000" {% if responses.get('platelets') == '>150.000' %}selected{% endif %}>&gt;150.000</option>
+                </select>
+            </div>
+
+            <!-- (16) Bilirubin -->
+            <div class="form-group">
+                <label for="bilirubin">Bilirubin:</label>
+                <select id="bilirubin" name="bilirubin">
+                    <option value="normal" {% if responses.get('bilirubin') == 'normal' %}selected{% endif %}>Normal</option>
+                    <option value="<1.5" {% if responses.get('bilirubin') == '<1.5' %}selected{% endif %}>&lt;1.5 times the normal value</option>
+                    <option value="1.5-2" {% if responses.get('bilirubin') == '1.5-2' %}selected{% endif %}>1.5-2 times the normal value</option>
+                    <option value="2-5" {% if responses.get('bilirubin') == '2-5' %}selected{% endif %}>2-5 times the normal value</option>
+                    <option value=">5" {% if responses.get('bilirubin') == '>5' %}selected{% endif %}>&gt;5 times the normal value</option>
+                </select>
+            </div>
+
+            <!-- (17) AST/ALT -->
+            <div class="form-group">
+                <label for="ast_alt">AST/ALT:</label>
+                <select id="ast_alt" name="ast_alt">
+                    <option value="normal" {% if responses.get('ast_alt') == 'normal' %}selected{% endif %}>Normal</option>
+                    <option value="<1.5" {% if responses.get('ast_alt') == '<1.5' %}selected{% endif %}>&lt;1.5 times the normal value</option>
+                    <option value="1.5-2" {% if responses.get('ast_alt') == '1.5-2' %}selected{% endif %}>1.5-2 times the normal value</option>
+                    <option value="2-5" {% if responses.get('ast_alt') == '2-5' %}selected{% endif %}>2-5 times the normal value</option>
+                    <option value=">5" {% if responses.get('ast_alt') == '>5' %}selected{% endif %}>&gt;5 times the normal value</option>
+                </select>
+            </div>
+
+            <!-- (18) Albumin -->
+            <div class="form-group">
+                <label>Albumin:</label>
+                <div class="radio-group">
+                    <input type="radio" id="albumin_normal" name="albumin" value="normal" {% if responses.get('albumin') == 'normal' %}checked{% endif %}>
+                    <label for="albumin_normal">Normal</label>
+                    <input type="radio" id="albumin_below_normal" name="albumin" value="below normal" {% if responses.get('albumin') == 'below normal' %}checked{% endif %}>
+                    <label for="albumin_below_normal">Below normal</label>
+                </div>
+            </div>
+
+            <!-- (19) Creatinine -->
+            <div class="form-group">
+                <label for="creatinine">Creatinine:</label>
+                <select id="creatinine" name="creatinine">
+                    <option value="normal" {% if responses.get('creatinine') == 'normal' %}selected{% endif %}>Normal</option>
+                    <option value="<1.25" {% if responses.get('creatinine') == '<1.25' %}selected{% endif %}>&lt;1.25 upper normal value</option>
+                    <option value=">1.25" {% if responses.get('creatinine') == '>1.25' %}selected{% endif %}>&gt;1.25 upper normal value</option>
+                </select>
+            </div>
+
+            <!-- (20) eGFR -->
+            <div class="form-group">
+                <label for="egfr">eGFR:</label>
+                <div class="radio-group">
+                    <input type="radio" id="egfr_lt_50" name="egfr" value="<50" {% if responses.get('egfr') == '<50' %}checked{% endif %}>
+                    <label for="egfr_lt_50">&lt;50</label>
+                    <input type="radio" id="egfr_50_60" name="egfr" value="50-60" {% if responses.get('egfr') == '50-60' %}checked{% endif %}>
+                    <label for="egfr_50_60">From 50 to 60</label>
+                    <input type="radio" id="egfr_60_90" name="egfr" value="60-90" {% if responses.get('egfr') == '60-90' %}checked{% endif %}>
+                    <label for="egfr_60_90">From 60 to 90</label>
+                    <input type="radio" id="egfr_gt_90" name="egfr" value=">90" {% if responses.get('egfr') == '>90' %}checked{% endif %}>
+                    <label for="egfr_gt_90">&gt;90</label>
+                </div>
+            </div>
+
+            <!-- (21) CEA "CEA (CURRENT)" -->
+            <div class="form-group">
+                <label for="cea">CEA (CURRENT):</label>
+                <input type="number" id="cea" name="cea" value="{{ responses.get('cea', '') }}">
+            </div>
+
+            <!-- (22) CEA trend -->
+            <div class="form-group">
+                <label for="cea_trend">CEA trend in time:</label>
+                <select id="cea_trend" name="cea_trend">
+                    <option value="stable" {% if responses.get('cea_trend') == 'stable' %}selected{% endif %}>Stable</option>
+                    <option value="increasing" {% if responses.get('cea_trend') == 'increasing' %}selected{% endif %}>Increasing</option>
+                    <option value="decreasing<50%" {% if responses.get('cea_trend') == 'decreasing<50%' %}selected{% endif %}>Decreasing &lt;50%</option>
+                    <option value="decreasing>50%" {% if responses.get('cea_trend') == 'decreasing>50%' %}selected{% endif %}>Decreasing &gt;50%</option>
+                </select>
+            </div>
+            
+            <!-- Submit Button -->
+            <br><br>
+            <div style="display: flex; justify-content: space-between; gap: 20px; width: 100%;">
+                <button type="button" class="btn-back" onclick="window.location.href='{{ url_for('home') }}'">Home page</button>
+                <button type="submit" class="btn-next">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Function to show/hide fields based on user responses
+        function handleFieldVisibility() {
+            var otherMalignanciesYesElem = document.getElementById('other_malignancies_yes');
+            var otherMalignanciesDetails = document.getElementById('other_malignancies_details');
+
+            if (otherMalignanciesYesElem.checked) {
+                otherMalignanciesDetails.classList.remove('hidden');
+            } else {
+                otherMalignanciesDetails.classList.add('hidden');
+            }
+        }
+
+        // Event listeners for the responses
+        document.querySelectorAll('input[name="other_malignancies"]').forEach(function(input) {
+            input.addEventListener('change', handleFieldVisibility);
+        });
+
+        // Initialization
+        window.onload = function() {
+            handleFieldVisibility();
+        };
+    </script>
+
+    <footer>
+        2025 | Scuola Normale Superiore &amp;
+        University of Roma Tor Vergata
+    </footer>
+</body>
+</html>

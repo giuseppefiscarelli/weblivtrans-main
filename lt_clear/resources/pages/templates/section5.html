@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section 5: Disease Trend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-header">
+        LT-CLEAR
+    </div>
+    <div class="container">
+        <h1>Section 5: Disease Trend</h1>
+        <form id="diseaseTrendForm" action="{{ url_for('section5') }}" method="POST">
+            
+            <!-- (54) Received trans-arterial treatment -->
+            <div class="form-group">
+                <label>Received trans-arterial treatment?</label>
+                <div class="radio-group">
+                    <input type="radio" id="trans_arterial_treatment_yes" name="trans_arterial_treatment" value="yes"
+                    {% if responses.get('trans_arterial_treatment') == 'yes' %}checked{% endif %}>
+                    <label for="trans_arterial_treatment_yes">Yes</label>
+
+                    <input type="radio" id="trans_arterial_treatment_no" name="trans_arterial_treatment" value="no"
+                    {% if responses.get('trans_arterial_treatment') == 'no' %}checked{% endif %}>
+                    <label for="trans_arterial_treatment_no">No</label>
+                </div>
+            </div>
+
+            <!-- (51) Disease trend -->
+            <div class="form-group">
+                <label>Disease trend:</label>
+                <div class="radio-group">
+                    <input type="radio" id="trend_stable" name="disease_trend" value="stable"
+                    {% if responses.get('disease_trend') == 'stable' %}checked{% endif %}>
+                    <label for="trend_stable">Stable</label>
+
+                    <input type="radio" id="trend_partial_response" name="disease_trend" value="partial_response"
+                    {% if responses.get('disease_trend') == 'partial_response' %}checked{% endif %}>
+                    <label for="trend_partial_response">Partial response</label>
+
+                    <input type="radio" id="trend_progression" name="disease_trend" value="progression"
+                    {% if responses.get('disease_trend') == 'progression' %}checked{% endif %}>
+                    <label for="trend_progression">Progression</label>
+                </div>
+            </div>
+
+            <!-- (52) Stability or regression time -->
+            <div class="form-group">
+                <label for="stability_time">Stability or regression time (weeks):</label>
+                <select id="stability_time" name="stability_time">
+                    <option value="<8" {% if responses.get('stability_time') == '<8' %}selected{% endif %}>&lt;8 weeks</option>
+                    <option value="8-12" {% if responses.get('stability_time') == '8-12' %}selected{% endif %}>8-12 weeks</option>
+                    <option value="12-16" {% if responses.get('stability_time') == '12-16' %}selected{% endif %}>12-16 weeks</option>
+                    <option value="16-24" {% if responses.get('stability_time') == '16-24' %}selected{% endif %}>16-24 weeks</option>
+                    <option value="24-26" {% if responses.get('stability_time') == '24-26' %}selected{% endif %}>24-26 weeks</option>
+                    <option value="26-104" {% if responses.get('stability_time') == '26-104' %}selected{% endif %}>26-104 weeks</option>
+                    <option value=">104" {% if responses.get('stability_time') == '>104' %}selected{% endif %}>&gt;104 weeks</option>
+                </select>
+            </div>
+
+            <!-- (53) Partial disease response -->
+            <div class="form-group {% if responses.get('disease_trend') != 'partial_response' %}hidden{% endif %}" id="partial_response_group">
+                <label>Partial disease response</label>
+                <label><em>(According to mRECIST criteria)</em></label>
+                <div class="radio-group">
+                    <input type="radio" id="response_lt_10" name="partial_response" value="<10%"
+                    {% if responses.get('partial_response') == '<10%' %}checked{% endif %}>
+                    <label for="response_lt_10">&lt;10%</label>
+
+                    <input type="radio" id="response_10_20" name="partial_response" value="10-20%"
+                    {% if responses.get('partial_response') == '10-20%' %}checked{% endif %}>
+                    <label for="response_10_20">10-20%</label>
+
+                    <input type="radio" id="response_20_30" name="partial_response" value="20-30%"
+                    {% if responses.get('partial_response') == '20-30%' %}checked{% endif %}>
+                    <label for="response_20_30">20-30%</label>
+
+                    <input type="radio" id="response_gt_30" name="partial_response" value=">30%"
+                    {% if responses.get('partial_response') == '>30%' %}checked{% endif %}>
+                    <label for="response_gt_30">&gt;30%</label>
+                </div>
+            </div>
+            
+            <!-- Submit Buttons -->
+            <br><br>
+            <div style="display: flex; justify-content: space-between; gap: 20px; width: 100%;">
+                <button type="button" class="btn-back" onclick="window.location.href='{{ url_for('section4') }}'">Back</button>
+                <button type="submit" class="btn-submit" onclick="window.location.href='{{ url_for('results_page') }}'">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Function to handle visibility of partial response fields
+        function handleDiseaseTrendVisibility() {
+            var trendPartialResponse = document.getElementById('trend_partial_response').checked;
+            var partialResponseGroup = document.getElementById('partial_response_group');
+
+            if (trendPartialResponse) {
+                partialResponseGroup.classList.remove('hidden');
+            } else {
+                partialResponseGroup.classList.add('hidden');
+            }
+        }
+
+        // Event listeners for the responses
+        document.querySelectorAll('input[name="disease_trend"]').forEach(function(input) {
+            input.addEventListener('change', handleDiseaseTrendVisibility);
+        });
+
+        // Initialization
+        window.onload = function() {
+            handleDiseaseTrendVisibility();
+        };
+    </script>
+
+
+</body>
+<footer>
+    2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+</footer>
+</html>

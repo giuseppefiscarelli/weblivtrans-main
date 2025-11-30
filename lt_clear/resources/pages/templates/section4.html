@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 4: Systemic Therapy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="card-header">
+        LT-CLEAR
+    </div>
+    <div class="container">
+        <h1>Section 4: Systemic Therapy</h1>
+        <form id="systemicTherapyForm" action="{{ url_for('section4') }}" method="POST">
+            
+            <!-- (48) Received systemic therapy -->
+            <div class="form-group">
+                <label>Received systemic therapy?</label>
+                <div class="radio-group">
+                    <input type="radio" id="systemic_therapy_yes" name="systemic_therapy" value="yes"
+                    {% if responses.get('systemic_therapy') == 'yes' %}checked{% endif %}>
+                    <label for="systemic_therapy_yes">Yes</label>
+
+                    <input type="radio" id="systemic_therapy_no" name="systemic_therapy" value="no"
+                    {% if responses.get('systemic_therapy') == 'no' %}checked{% endif %}>
+                    <label for="systemic_therapy_no">No</label>
+                </div>
+            </div>
+            <!-- (49) Chemotherapy time and (50) Chemotherapy lines -->
+            <div class="form-group {% if responses.get('systemic_therapy') != 'yes' %}hidden{% endif %}" id="chemotherapy_fields" style="background-color: #e8f4fd; border-left: 4px solid #3498db;">
+                <h2 style="margin-top: 0;">Chemotherapy Details</h2>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="chemotherapy_time">Chemotherapy time (weeks):</label>
+                    <select id="chemotherapy_time" name="chemotherapy_time">
+                        <option value="">Select duration</option>
+                        <option value="<6" {% if responses.get('chemotherapy_time') == '<6' %}selected{% endif %}>Less than 6 weeks</option>
+                        <option value="6-8" {% if responses.get('chemotherapy_time') == '6-8' %}selected{% endif %}>6-8 weeks</option>
+                        <option value="8-12" {% if responses.get('chemotherapy_time') == '8-12' %}selected{% endif %}>8-12 weeks</option>
+                        <option value="12-26" {% if responses.get('chemotherapy_time') == '12-26' %}selected{% endif %}>12-26 weeks</option>
+                        <option value="26-104" {% if responses.get('chemotherapy_time') == '26-104' %}selected{% endif %}>26-104 weeks</option>
+                        <option value=">104" {% if responses.get('chemotherapy_time') == '>104' %}selected{% endif %}>More than 104 weeks</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Chemotherapy lines:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="chemo_line1" name="chemotherapy_lines" value="1" {% if responses.get('chemotherapy_lines') == '1' %}checked{% endif %}>
+                        <label for="chemo_line1">1</label>
+
+                        <input type="radio" id="chemo_line2" name="chemotherapy_lines" value="2" {% if responses.get('chemotherapy_lines') == '2' %}checked{% endif %}>
+                        <label for="chemo_line2">2</label>
+
+                        <input type="radio" id="chemo_line3" name="chemotherapy_lines" value="3" {% if responses.get('chemotherapy_lines') == '3' %}checked{% endif %}>
+                        <label for="chemo_line3">3</label>
+
+                        <input type="radio" id="chemo_line_more" name="chemotherapy_lines" value=">3" {% if responses.get('chemotherapy_lines') == '>3' %}checked{% endif %}>
+                        <label for="chemo_line_more">More than 3</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div style="display: flex; justify-content: space-between; gap: 20px; width: 100%; margin-top: 30px;">
+                <button type="button" class="btn-back" onclick="window.location.href='{{ url_for('section3') }}'">Back</button>
+                <button type="submit" class="btn-next">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Function to handle visibility of chemotherapy fields
+        function handleSystemicTherapyVisibility() {
+            var systemicTherapyYes = document.getElementById('systemic_therapy_yes').checked;
+            var chemotherapyFields = document.getElementById('chemotherapy_fields');
+
+            if (systemicTherapyYes) {
+                chemotherapyFields.classList.remove('hidden');
+            } else {
+                chemotherapyFields.classList.add('hidden');
+            }
+        }
+
+        // Event listeners for the responses
+        document.querySelectorAll('input[name="systemic_therapy"]').forEach(function(input) {
+            input.addEventListener('change', handleSystemicTherapyVisibility);
+        });
+
+        // Initialization
+        window.onload = function() {
+            handleSystemicTherapyVisibility();
+        };
+    </script>
+
+    <footer>
+        2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+      </footer>
+</body>
+</html>

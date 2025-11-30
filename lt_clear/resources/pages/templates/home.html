@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - LT-CLEAR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+  <div class="card-header">
+    LT-CLEAR
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        LT-CLEAR <span class="text-muted">Eligibility Tool</span>
+      </div>
+      <div class="card-body">
+        <h1 class="text-muted d-block" style="font-family:'Ubuntu','Inter','Source Sans 3','Public Sans','IBM Plex Sans','Noto Sans','Open Sans','DejaVu Sans','Liberation Sans',sans-serif; font-weight:500; letter-spacing:.2px;">
+  Liver Transplantation for Colorectal Liver Metastases<br>Eligibility Assessment for Referral (LT-CLEAR)
+	</h1>
+
+	<div class="description-block review-text">
+          <p>
+            Liver transplantation (LT) for unresectable colorectal liver metastases (uCRLM) has shown good results in recent trials, and the field is rapidly expanding with new studies. We aimed to develop a practical tool to select patients who could benefit from transplantation.
+          </p>
+          <p>
+            The LT-CLEAR tool is based on a systematic review of all protocols for LT in uCRLM. Eligible studies included published and ongoing trials. The primary aims were to identify (a) inclusion criteria and (b) exclusion criteria for LT.
+          </p>
+          <p style="font-weight: 300;">
+          Out of 27 studies, the majority were ongoing, while 8 (29.6%) had published results.<br>
+Criteria addressed patient status, primary cancer, extent of metastatic disease, systemic therapy, and disease trend.<br>
+Radical resection of the primary tumor was required in 52% of protocols, while patients could be excluded for inadequate margins (11%), advanced T (22%) or N (19%) stage.<br>
+Biological exclusion criteria included BRAF mutation (52%), microsatellite instability (22%), and RAS mutation (7%).<br>
+Hepatic lesion size was considered in 33% of trials, while lesion number in only 4%.<br>
+Extrahepatic disease was not admissible in 67% of trials, whereas 26% accepted resectable lung lesions.<br>
+Systemic therapy was mandatory in 93% of protocols, with disease stability (67%) or partial response (11%) required in most.
+</p>
+        </div>
+
+        <div class="description-block">
+        <h2 class="text-muted d-block" style="font-family:'Ubuntu','Inter','Source Sans 3','Public Sans','IBM Plex Sans','Noto Sans','Open Sans','DejaVu Sans','Liberation Sans',sans-serif; font-weight:500; letter-spacing:.2px;">
+		Find your protocol:</h2>
+          <p>
+            This tool was developed for clinicians to determine whether their patient can be waitlisted according to a published trial or enrolled in an ongoing study, thereby promoting broader consideration of liver transplantation as a therapeutic option for colorectal liver metastases.
+          </p>
+          <p>
+            Enter patient information and find out if he/she would be eligible in a liver transplantation protocol for colorectal liver metastases.
+          </p>
+        </div>
+
+        <div class="buttons">
+          <a href="{{ url_for('section1') }}" class="button start-program">Start Program</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+  </footer>
+</body>
+</html>
