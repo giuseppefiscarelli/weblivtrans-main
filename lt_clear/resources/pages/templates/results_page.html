@@ -7,47 +7,131 @@
 </head>
 <body>
   <div class="card-header">
-    LT-CLEAR
+        <strong>LT-CLEAR</strong>	Liver Transplantation for Colorectal Liver Metastases Eligibility Assessment for Referral
   </div>
+
   <div class="container">
     <h1>Results: Protocol Inclusion</h1>
+
     <div class="card">
       <div class="card-body">
-        {% if matched_protocols and matched_protocols != [('No protocols are adoptable for the patient.', '')] %}
-          {% if success_message %}
-            <div class="success-message">
-              {{ success_message }}
-            </div>
-          {% endif %}
+
+        {# sentinel used by backend when there are no adoptable protocols #}
+        {% set NO_MATCH = [("No protocols are adoptable for the patient.", [])] %}
+
+        {% if success_message %}
+          <div class="success-message">
+            {{ success_message }}
+          </div>
+        {% endif %}
+
+        {% if matched_protocols and matched_protocols != NO_MATCH %}
+
           <div class="card-header">
             The patient <strong>can be included</strong> in the following protocols:
           </div>
+
           <ul class="protocol-result">
             {% for protocol, details in matched_protocols %}
+
+              {# ============================================================
+                 LOGIC:
+                 - Color (green/yellow) from Results (Published vs not available)
+                 ============================================================ #}
+
+              {# ns.color: 'published' | 'missing' #}
+              {% set ns = namespace(
+                color='missing',
+                results_line=none,
+                study_line=none,
+                other_lines=[]
+              ) %}
+
+              {% if details %}
+                {% for d in details %}
+                  {% set dl = d|lower %}
+
+                  {# --- results line (decides the color) --- #}
+                  {% if ('results availability:' in dl) or (dl.startswith('results') and ':' in dl) %}
+                    {% if ns.results_line is none %}
+                      {% set ns.results_line = d %}
+                    {% endif %}
+                    {% if ('published' in dl) or ('publiched' in dl) %}
+                      {% set ns.color = 'published' %}
+                    {% else %}
+                      {% if ns.color != 'published' %}
+                        {% set ns.color = 'missing' %}
+                      {% endif %}
+                    {% endif %}
+
+                  {# --- study status line (printed but does NOT decide the color) --- #}
+                  {% elif 'study status:' in dl %}
+                    {% if ns.study_line is none %}
+                      {% set ns.study_line = d %}
+                    {% else %}
+                      {# prefer Recruiting over Concluded if both appear #}
+                      {% if (('recruiting' in dl) or ('rectruiting' in dl)) and ('concluded' in (ns.study_line|lower)) %}
+                        {% set ns.study_line = d %}
+                      {% endif %}
+                    {% endif %}
+
+                  {# --- anything else --- #}
+                  {% else %}
+                    {% set ns.other_lines = ns.other_lines + [d] %}
+                  {% endif %}
+
+                {% endfor %}
+              {% endif %}
+
               <li>
-                <p class="protocol-name">{{ protocol }}</p>
+                {# Protocol title #}
+                <p class="protocol-name{% if ns.color == 'published' %} flag-published{% else %} flag-missing{% endif %}">
+                  {{ protocol }}
+                </p>
+
                 {% if details %}
                   <ul class="protocol-details">
-                    {% for detail in details %}
-                      <li>* {{ detail|urlize }}</li>
+
+                    {# Single colored box #}
+                    <li class="status-row{% if ns.color == 'published' %} flag-published{% else %} flag-missing{% endif %}">
+                      {% if ns.results_line %}
+                        {{ ns.results_line }}
+                      {% else %}
+                        Results availability: not available
+                      {% endif %}
+
+                      {% if ns.study_line %}
+                        <br>{{ ns.study_line }}
+                      {% endif %}
+                    </li>
+
+                    {# Other details as normal rows #}
+                    {% for d in ns.other_lines %}
+                      <li>{{ d|urlize }}</li>
                     {% endfor %}
+
                   </ul>
                 {% endif %}
               </li>
+
             {% endfor %}
           </ul>
+
         {% else %}
-          <p>The patient <strong>cannot be included</strong> in any protocols.</p>
+          <div class="no-match-message">No protocols are adoptable for the patient.</div>
         {% endif %}
+
       </div>
     </div>
-        <div class="buttons">
-          <a href="{{ url_for('patient_report') }}" class="button">View Patient Report</a>
-          <a href="{{ url_for('restart') }}" class="button">Restart: New Patient</a>
-        </div>
-      </div>
+
+    <div class="buttons">
+      <a href="{{ url_for('patient_report') }}" class="button">View Patient Report</a>
+      <a href="{{ url_for('excluded_protocols') }}" class="button">Check excluded protocols</a>
+      <a href="{{ url_for('restart') }}" class="button">Restart: New Patient</a>
     </div>
+
   </div>
+
   <footer>
     2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
   </footer>

@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="card-header">
-        LT-CLEAR
+        <strong>LT-CLEAR</strong>	Liver Transplantation for Colorectal Liver Metastases Eligibility Assessment for Referral
     </div>
     <div class="container">
         <h1>Section 5: Disease Trend</h1>
@@ -54,12 +54,13 @@
             <div class="form-group">
                 <label for="stability_time">Stability or regression time (weeks):</label>
                 <select id="stability_time" name="stability_time">
-                    <option value="<8" {% if responses.get('stability_time') == '<8' %}selected{% endif %}>&lt;8 weeks</option>
+                    <option value="<6" {% if responses.get('stability_time') == '<6' %}selected{% endif %}>&lt;6 weeks</option>
+                    <option value="6-8" {% if responses.get('stability_time') == '6-8' %}selected{% endif %}>6-8 weeks</option>
                     <option value="8-12" {% if responses.get('stability_time') == '8-12' %}selected{% endif %}>8-12 weeks</option>
                     <option value="12-16" {% if responses.get('stability_time') == '12-16' %}selected{% endif %}>12-16 weeks</option>
                     <option value="16-24" {% if responses.get('stability_time') == '16-24' %}selected{% endif %}>16-24 weeks</option>
                     <option value="24-26" {% if responses.get('stability_time') == '24-26' %}selected{% endif %}>24-26 weeks</option>
-                    <option value="26-104" {% if responses.get('stability_time') == '26-104' %}selected{% endif %}>26-104 weeks</option>
+                    <option value="26-104" {% if responses.get('stability_time') == '26-104' %}selected{% endif %}>26-104</option>
                     <option value=">104" {% if responses.get('stability_time') == '>104' %}selected{% endif %}>&gt;104 weeks</option>
                 </select>
             </div>

@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="card-header">
-    LT-CLEAR
+        <strong>LT-CLEAR</strong>	Liver Transplantation for Colorectal Liver Metastases Eligibility Assessment for Referral
   </div>
   <div class="container">
     <h1>Section 3: Extent of Disease</h1>
@@ -74,18 +74,7 @@
         </div>
       </div>
 
-      <!-- (39) Number of Hepatic Lesions Before Chemo -->
-      <div class="form-group">
-        <label for="num_hepatic_lesions_before_chemo">Number of hepatic lesions before chemo:</label>
-        <div class="radio-group">
-          <input type="radio" id="num_hepatic_lesions_before_chemo_lt20" name="num_hepatic_lesions_before_chemo" value="<20" {% if responses.get('num_hepatic_lesions_before_chemo') == '<20' %}checked{% endif %}>
-          <label for="num_hepatic_lesions_before_chemo_lt20">&lt;20</label>
-          <input type="radio" id="num_hepatic_lesions_before_chemo_gt20" name="num_hepatic_lesions_before_chemo" value=">20" {% if responses.get('num_hepatic_lesions_before_chemo') == '>20' %}checked{% endif %}>
-          <label for="num_hepatic_lesions_before_chemo_gt20">&gt;20</label>
-        </div>
-      </div>
-
-      <!-- (40) Dimensions of Largest Hepatic Lesion Before Chemo -->
+      <!-- (39) Dimensions of Largest Hepatic Lesion Before Chemo -->
       <div class="form-group">
         <label for="dim_largest_lesion_before_chemo">Dimensions of largest hepatic lesion before chemo (cm):</label>
         <div class="radio-group">
@@ -96,7 +85,7 @@
         </div>
       </div>
 
-      <!-- (41) Dimensions of Largest Hepatic Lesion Current -->
+      <!-- (40) Dimensions of Largest Hepatic Lesion Current -->
       <div class="form-group">
         <label for="dim_largest_lesion_current">Dimensions of largest hepatic lesion current (cm):</label>
         <select id="dim_largest_lesion_current" name="dim_largest_lesion_current">
@@ -107,7 +96,7 @@
         </select>
       </div>
 
-      <!-- (42) Major Vascular Invasion -->
+      <!-- (41) Major Vascular Invasion -->
       <div class="form-group">
         <label>Major vascular invasion:</label>
         <div class="radio-group">
@@ -120,7 +109,7 @@
         </div>
       </div>
 
-      <!-- (43) Diaphragmatic Invasion -->
+      <!-- (42) Diaphragmatic Invasion -->
       <div class="form-group">
         <label>Diaphragmatic invasion:</label>
         <div class="radio-group">
@@ -133,7 +122,7 @@
         </div>
       </div>
 
-      <!-- (44) Extrahepatic Metastatic Disease -->
+      <!-- (43) Extrahepatic Metastatic Disease -->
       <div class="form-group">
         <label>Extrahepatic metastatic disease:</label>
         <div class="radio-group">
@@ -147,7 +136,7 @@
       </div>
       
 
-      <!-- (45) Extrahepatic Metastatic Disease Type -->
+      <!-- (44) Extrahepatic Metastatic Disease Type -->
       <div class="form-group {% if responses.get('extrahepatic') != 'yes' %}hidden{% endif %}" id="extrahepatic_type_subgroup">
         <label>Extrahepatic metastatic disease type:</label>
         <div class="radio-group">
@@ -160,7 +149,7 @@
         </div>
       </div>
 
-      <!-- (46) Resectable Lung Lesion Number and (47) Dimensions -->
+      <!-- (45) Resectable Lung Lesion Number and (47) Dimensions -->
       <div class="form-group {% if not (responses.get('extrahepatic') == 'yes' and responses.get('extrahepatic_type') == 'resectable') %}hidden{% endif %}" id="resectable_lung_group">
         <label for="resectable_lung_number">Resectable lung lesion number:</label>
         <input type="number" id="resectable_lung_number" name="resectable_lung_number" value="{{ responses.get('resectable_lung_number', '') }}">

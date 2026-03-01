@@ -1,22 +1,24 @@
 import collections
 
+
 # Main fields data, as tuple of named tuples
 # each tuple contains:
-# . label
-# . data type (field)
-# . HTML section/page to which field belong
-# . optionality
-# . index in field of protocol DB for test
-# . query parameters as dictionary
+# . internal key (name)            -> safe identifier (used in forms/DB keys)
+# . display label (label)          -> human-readable label for reports/UI
+# . data type (type)
+# . HTML section/page (section)
+# . required flag (req)
+# . index in query list (query_id)
 
 FieldInfo = collections.namedtuple(
-    'FieldInfo', ('name', 'type', 'section', 'req', 'query_id')
+    'FieldInfo', ('name', 'label', 'type', 'section', 'req', 'query_id')
 )
 
 fields_data = (
     # Section 1 Fields
     FieldInfo(  # 0: Age
         name='age',
+        label='Age',
         type='numeric',
         section=1,
         req=True,
@@ -24,22 +26,23 @@ fields_data = (
     ),
     FieldInfo(  # 1: ECOG
         name='ecog',
+        label='ECOG performance status',
         type='radio-group',
         section=1,
         req=True,
         query_id=1,
-        ),
-        
+    ),
     FieldInfo(  # 2: BMI
         name='bmi',
+        label='BMI >30',
         type='radio-group',
         section=1,
         req=True,
         query_id=2,
     ),
-    
     FieldInfo(  # 3: HBV
         name='hbv',
+        label='Chronic HBV infection ',
         type='radio-group',
         section=1,
         req=True,
@@ -47,6 +50,7 @@ fields_data = (
     ),
     FieldInfo(  # 4: HCV
         name='hcv',
+        label='HCV',
         type='radio-group',
         section=1,
         req=True,
@@ -54,6 +58,7 @@ fields_data = (
     ),
     FieldInfo(  # 5: HIV
         name='hiv',
+        label='HIV',
         type='radio-group',
         section=1,
         req=True,
@@ -61,6 +66,7 @@ fields_data = (
     ),
     FieldInfo(  # 6: weight loss (last 6 month)
         name='weight_loss',
+        label='Weight loss in the last 6 month',
         type='radio-group',
         section=1,
         req=True,
@@ -68,20 +74,23 @@ fields_data = (
     ),
     FieldInfo(  # 7: other malignancies
         name='other_malignancies',
+        label='Other malignancies',
         type='radio-group',
         section=1,
         req=True,
         query_id=7,
     ),
-    FieldInfo(  # 8: malignancies timing 
+    FieldInfo(  # 8: malignancies timing
         name='malignancies_timing',
+        label='Other malignancies timing',
         type='radio-group',
         section=1,
         req=True,
         query_id=8,
     ),
-    FieldInfo(  # 9: malignancies_type   
-        name='malignancies_type',    
+    FieldInfo(  # 9: malignancies_type
+        name='malignancies_type',
+        label='Other malignancies type',
         type='radio-group',
         section=1,
         req=True,
@@ -89,6 +98,7 @@ fields_data = (
     ),
     FieldInfo(  # 10: hb
         name='hb',
+        label='Hemoglobin',
         type='form-group',
         section=1,
         req=True,
@@ -96,6 +106,7 @@ fields_data = (
     ),
     FieldInfo(  # 11: wbc
         name='wbc',
+        label='White blood cells count',
         type='form-group',
         section=1,
         req=True,
@@ -103,6 +114,7 @@ fields_data = (
     ),
     FieldInfo(  # 12: neutrophils
         name='neutrophils',
+        label='Neutrophils',
         type='form-group',
         section=1,
         req=True,
@@ -110,6 +122,7 @@ fields_data = (
     ),
     FieldInfo(  # 13: platelets
         name='platelets',
+        label='Platelets',
         type='form-group',
         section=1,
         req=True,
@@ -117,6 +130,7 @@ fields_data = (
     ),
     FieldInfo(  # 14: bilirubin
         name='bilirubin',
+        label='Bilirubin',
         type='form-group',
         section=1,
         req=True,
@@ -124,6 +138,7 @@ fields_data = (
     ),
     FieldInfo(  # 15: ast_alt
         name='ast_alt',
+        label='AST / ALT ',
         type='form-group',
         section=1,
         req=True,
@@ -131,6 +146,7 @@ fields_data = (
     ),
     FieldInfo(  # 16: albumin
         name='albumin',
+        label='Albumin above lower normal level',
         type='radio-group',
         section=1,
         req=True,
@@ -138,6 +154,7 @@ fields_data = (
     ),
     FieldInfo(  # 17: creatinine
         name='creatinine',
+        label='Creatinine',
         type='form-group',
         section=1,
         req=True,
@@ -145,6 +162,7 @@ fields_data = (
     ),
     FieldInfo(  # 18: egfr
         name='egfr',
+        label='Calculated Creatinine clearance mL/min(MDRD).',
         type='radio-group',
         section=1,
         req=True,
@@ -152,6 +170,7 @@ fields_data = (
     ),
     FieldInfo(  # 19: cea
         name='cea',
+        label='CEA',
         type='numeric',
         section=1,
         req=True,
@@ -159,30 +178,33 @@ fields_data = (
     ),
     FieldInfo(  # 20: cea_trend
         name='cea_trend',
+        label='CEA trend',
         type='form-group',
         section=1,
         req=True,
         query_id=18,
-    ),     
+    ),
+
     # Section 2 Fields
     FieldInfo(  # 21: crc_diagnosis_time
         name='crc_diagnosis_time',
+        label='Time elapsed from CRC diagnosis (months)',
         type='form-group',
         section=2,
         req=True,
         query_id=19
     ),
-
     FieldInfo(  # 22: crc_resection_time
         name='crc_resection_time',
+        label='Time elpased from primary CRC resection (months)',
         type='form-group',
         section=2,
         req=True,
         query_id=20
     ),
-
     FieldInfo(  # 23: location
         name='location',
+        label='Primary CRC location',
         type='form-group',
         section=2,
         req=True,
@@ -190,6 +212,7 @@ fields_data = (
     ),
     FieldInfo(  # 24: resection_margin
         name='resection_margin',
+        label='Rectal cancer margin',
         type='form-group',
         section=2,
         req=True,
@@ -197,6 +220,7 @@ fields_data = (
     ),
     FieldInfo(  # 25: radical_resection
         name='radical_resection',
+        label='Radical high-standard oncological resection',
         type='radio-group',
         section=2,
         req=True,
@@ -204,6 +228,7 @@ fields_data = (
     ),
     FieldInfo(  # 26: standard_treatment
         name='standard_treatment',
+        label='Patients received standard treatment for the primary CRC according to recommended guidelines',
         type='radio-group',
         section=2,
         req=True,
@@ -211,6 +236,7 @@ fields_data = (
     ),
     FieldInfo(  # 27: histology_t
         name='histology_t',
+        label='Primary Histology: T',
         type='radio-group',
         section=2,
         req=True,
@@ -218,6 +244,7 @@ fields_data = (
     ),
     FieldInfo(  # 28: histology_n
         name='histology_n',
+        label='Primary histology: N',
         type='radio-group',
         section=2,
         req=True,
@@ -225,6 +252,7 @@ fields_data = (
     ),
     FieldInfo(  # 29: histology_r
         name='histology_r',
+        label='Primary Histology: R',
         type='radio-group',
         section=2,
         req=True,
@@ -232,6 +260,7 @@ fields_data = (
     ),
     FieldInfo(  # 30: braf
         name='braf',
+        label='BRAF',
         type='radio-group',
         section=2,
         req=True,
@@ -239,6 +268,7 @@ fields_data = (
     ),
     FieldInfo(  # 31: ras
         name='ras',
+        label='RAS',
         type='radio-group',
         section=2,
         req=True,
@@ -246,14 +276,17 @@ fields_data = (
     ),
     FieldInfo(  # 32: microsatellite
         name='microsatellite',
+        label='Microsatellite',
         type='radio-group',
         section=2,
         req=True,
         query_id=29,
     ),
-    #section 3
+
+    # Section 3
     FieldInfo(  # 33: prior_metastatic
         name='prior_metastatic',
+        label='Prior extra hepatic metastatic disease or local relapse',
         type='radio-group',
         section=3,
         req=True,
@@ -261,6 +294,7 @@ fields_data = (
     ),
     FieldInfo(  # 34: metastatic_type
         name='metastatic_type',
+        label='Type of prior extrahepatic metastatic disease',
         type='radio-group',
         section=3,
         req=True,
@@ -268,6 +302,7 @@ fields_data = (
     ),
     FieldInfo(  # 35: timing_resection
         name='timing_resection',
+        label='Timing of resection of prior extrahepatic disease',
         type='form-group',
         section=3,
         req=True,
@@ -275,126 +310,135 @@ fields_data = (
     ),
     FieldInfo(  # 36: local_recurrence
         name='local_recurrence',
+        label='Local recurrence',
         type='radio-group',
         section=3,
         req=True,
         query_id=31,
     ),
-    FieldInfo(  # 37: num_hepatic_lesions_before_chemo
-        name='num_hepatic_lesions_before_chemo',
+    FieldInfo(  # 37: dim_largest_lesion_before_chemo
+        name='dim_largest_lesion_before_chemo',
+        label='Dimensions of hepatic lesions (before chemo)',
         type='radio-group',
         section=3,
         req=True,
         query_id=32,
     ),
-    FieldInfo(  # 38: dim_largest_lesion_before_chemo
-        name='dim_largest_lesion_before_chemo',
-        type='radio-group',
+    FieldInfo(  # 38: dim_largest_lesion_current
+        name='dim_largest_lesion_current',
+        label='Dimensions of hepatic lesions after chemo',
+        type='form-group',
         section=3,
         req=True,
         query_id=33,
     ),
-    FieldInfo(  # 39: dim_largest_lesion_current
-        name='dim_largest_lesion_current',
-        type='form-group',
+    FieldInfo(  # 39: vascular_invasion
+        name='vascular_invasion',
+        label='Major vascular invasion',
+        type='radio-group',
         section=3,
         req=True,
         query_id=34,
     ),
-    FieldInfo(  # 40: vascular_invasion
-        name='vascular_invasion',
+    FieldInfo(  # 40: diaphragmatic_invasion
+        name='diaphragmatic_invasion',
+        label='Diaphragm invasion',
         type='radio-group',
         section=3,
         req=True,
         query_id=35,
     ),
-    FieldInfo(  # 41: diaphragmatic_invasion
-        name='diaphragmatic_invasion',
+    FieldInfo(  # 41: extrahepatic
+        name='extrahepatic',
+        label='Extrahepatic metastatic disease',
         type='radio-group',
         section=3,
         req=True,
         query_id=36,
     ),
-    FieldInfo(  # 42: extrahepatic
-        name='extrahepatic',
-        type='radio-group',
-        section=3,
-        req=True,
-        query_id=37,
-    ),
-    FieldInfo(  # 43: extrahepatic_type
+    FieldInfo(  # 42: extrahepatic_type
         name='extrahepatic_type',
+        label='Extrahepatic metastatic disease type',
         type='radio-group',
         section=3,
         req=True,
-        query_id=37,
+        query_id=36,
     ),
-    FieldInfo(  # 44: resectable_lung_number
+    FieldInfo(  # 43: resectable_lung_number
         name='resectable_lung_number',
+        label='Resectable lung lesions number',
         type='numeric',
         section=3,
         req=True,
-        query_id=37,
+        query_id=36,
     ),
-    FieldInfo(  # 45: resectable_lung_dimensions
+    FieldInfo(  # 44: resectable_lung_dimensions
         name='resectable_lung_dimensions',
+        label='Resectable lung lesions dimensions',
         type='decimal',
         section=3,
         req=True,
+        query_id=36,
+    ),
+
+    # Section 4 Fields
+    FieldInfo(  # 45: systemic_therapy
+        name='systemic_therapy',
+        label='Recieved systemic therapy',
+        type='radio-group',
+        section=4,
+        req=True,
         query_id=37,
     ),
-    
-    # Section 4 Fields
-    FieldInfo(  # 46: systemic_therapy
-        name='systemic_therapy',
-        type='radio-group',
-        section=4,
-        req=True,
-        query_id=38,
-    ),
-    FieldInfo(  # 47: chemotherapy_time
+    FieldInfo(  # 46: chemotherapy_time
         name='chemotherapy_time',
+        label='Chemotherapy time',
         type='radio-group',
         section=4,
         req=True,
-        query_id=38,
+        query_id=37,
     ),
-    FieldInfo(  # 48: chemotherapy_lines
+    FieldInfo(  # 47: chemotherapy_lines
         name='chemotherapy_lines',
+        label='Chemotherapy lines',
         type='radio-group',
         section=4,
         req=True,
+        query_id=37,
+    ),
+
+    # Section 5 Fields
+    FieldInfo(  # 48: disease_trend
+        name='disease_trend',
+        label='Disease trend',
+        type='radio-group',
+        section=5,
+        req=True,
         query_id=38,
     ),
-    
-    # Section 5 Fields
-    FieldInfo(  # 49: disease_trend
-        name='disease_trend',
-        type='radio-group',
-        section=5,
-        req=True,
-        query_id=39,
-    ),
-    FieldInfo(  # 50: stability_time
+    FieldInfo(  # 49: stability_time
         name='stability_time',
+        label='Stability or regression time',
         type='radio-group',
         section=5,
         req=True,
-        query_id=39,
+        query_id=38,
     ),
-    FieldInfo(  # 51: partial_response
+    FieldInfo(  # 50: partial_response
         name='partial_response',
+        label='Partial disease response',
         type='radio-group',
         section=5,
         req=True,
-        query_id=39,
+        query_id=38,
     ),
-    FieldInfo(  # 52: trans_arterial_treatment
+    FieldInfo(  # 51: trans_arterial_treatment
         name='trans_arterial_treatment',
+        label='Trans-arterial treatment',
         type='radio-group',
         section=5,
         req=True,
-        query_id=39,
+        query_id=38,
     )
 )
 
@@ -600,29 +644,26 @@ query_data = [
         'no': lambda x: x == 'no',
         'no or yes but resected >2 years': lambda x: x in ['no', 'yes_res_2_years']
     },
-    # 32: num_hepatic_lesions_before_chemo
-    {
-        '<20 before chemo': lambda x: x == '<20'
-    },
-    # 33: dim_largest_lesion_before_chemo
+    
+    # 32: dim_largest_lesion_before_chemo
     {
         '<10 cm': lambda x: x == '<10'
     },
-    # 34: dim_largest_lesion_current
+    # 33: dim_largest_lesion_current
     {
         '<10 cm': lambda x: x in ['<5','5-5.5','5.5-10'],
         '<5 cm': lambda x: x == '<5',
         '<5.5 cm': lambda x: x in ['5-5.5','<5']
     },
-    # 35: vascular_invasion
+    # 34: vascular_invasion
     {
         'no': lambda x: x == 'no'
     },
-    # 36: diaphragmatic_invasion
+    # 35: diaphragmatic_invasion
     {
         'no': lambda x: x == 'no'
     },
-    # 37: extrahepatic AND extrahepatic_type AND resectable_lung_number AND resectable_lung_dimensions
+    # 36: extrahepatic AND extrahepatic_type AND resectable_lung_number AND resectable_lung_dimensions
     {
         'no': lambda x, y, z, k: x == 'no',
         'resectable lung lesions': lambda x, y, z, k: y == 'resectable',
@@ -631,7 +672,7 @@ query_data = [
         'resectable lung lesions'+'<4'+'<15 mm': lambda x, y, z, k: y == 'resectable' and z < 4 and k < 15
     },
     # Section 4
-    # 38: systemic_therapy AND chemotherapy_time <6 weeks vs 6-8 vs 8-12 vs 12-26 vs 26-104 vs >104 
+    # 37: systemic_therapy AND chemotherapy_time <6 weeks vs 6-8 vs 8-12 vs 12-26 vs 26-104 vs >104 
     # AND chemotherapy_lines 1 vs 2 vs 3 vs >3
     {
         'yes': lambda x, y, z: x == 'yes',
@@ -644,13 +685,14 @@ query_data = [
         'yes'+'1': lambda x, y, z: x == 'yes' and z == '1',
         'yes'+'>6 weeks'+'1': lambda x, y, z: x == 'yes' and y in ['6-8','8-12','12-26','26-104','>104'] and z == '1',
         'yes'+'>12 weeks'+'1': lambda x, y, z: x == 'yes' and y in ['12-26','26-104','>104'] and z == '1',
+        'yes'+'>12 weeks'+'<4': lambda x, y, z: x == 'yes' and y in ['12-26','26-104','>104'] and z in ['1','2','3'],
         'yes'+'>6 weeks'+'>1': lambda x, y, z: x == 'yes' and y in ['6-8','8-12','12-26','26-104','>104'] and z in ['2','3','>3'],
         'yes'+'<3': lambda x, y, z: x == 'yes' and z in ['1','2'],
         'yes'+'<4': lambda x, y, z: x == 'yes' and z in ['1','2','3'],
         'yes'+'>8 weeks'+'<2': lambda x, y, z: x == 'yes' and y in ['8-12','12-26','26-104','>104'] and z in ['1','2'],
     },
     # Section 5
-    # 39: disease_trend AND stability_time AND partial_response AND Received trans-arterial treatment
+    # 38: disease_trend AND stability_time AND partial_response AND Received trans-arterial treatment
     {
         # Stable or Partial Response
         'stability or partial response': lambda x, y, z, k: x in ['stable', 'partial_response'],
@@ -663,6 +705,7 @@ query_data = [
         'partial response'+'>30% response': lambda x, y, z, k: x == 'partial_response' and z == '>30%',
 
         # Stability or Partial Response over time
+        'stability or partial response'+'>6 weeks': lambda x, y, z, k: x in ['partial_response', 'stable'] and y in ['6-8','8-12', '12-16', '16-24', '24-26', '26-104', '>104'],
         'stability or partial response'+'>8 weeks': lambda x, y, z, k: x in ['partial_response', 'stable'] and y in ['8-12', '12-16', '16-24', '24-26', '26-104', '>104'],
         'stability or partial response'+'>12 weeks': lambda x, y, z, k: x in ['partial_response', 'stable'] and y in ['12-16', '16-24', '24-26', '26-104', '>104'],
         'stability or partial response'+'>16 weeks': lambda x, y, z, k: x in ['partial_response', 'stable'] and y in ['12-16', '16-24', '24-26', '26-104', '>104'],
@@ -677,6 +720,11 @@ query_data = [
         'partial response'+'>24 weeks'+'>10% RECIST OR >20% after trans-arterial treatment;'*2: lambda x, y, z, k:
             (x == 'partial_response' and y in ['24-26', '26-104', '>104'] and z in ['20-30%', '>30%']) if k == 'yes' 
             else (x == 'partial_response' and y in ['24-26', '26-104', '>104'] and z in ['10-20%', '20-30%', '>30%']),
+    
+        # Partial Response and RECIST evaluation 
+        'partial response'+'>6 weeks'+'>10% RECIST OR >20% after trans-arterial treatment;'*2: lambda x, y, z, k:
+            (x == 'partial_response' and y in ['6-8','8-12', '12-16', '16-24', '24-26', '26-104', '>104'] and z in ['20-30%', '>30%']) if k == 'yes' 
+            else (x == 'partial_response' and y in ['6-8','8-12', '12-16', '16-24', '24-26', '26-104', '>104'] and z in ['10-20%', '20-30%', '>30%']),
     },
 
 ]

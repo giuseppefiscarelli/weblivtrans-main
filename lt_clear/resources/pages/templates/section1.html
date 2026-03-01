@@ -13,7 +13,7 @@
 <body>
 
     <div class="card-header">
-        LT-CLEAR
+        <strong>LT-CLEAR</strong>	Liver Transplantation for Colorectal Liver Metastases Eligibility Assessment for Referral
     </div>
 
     <div class="container">
@@ -134,50 +134,50 @@
 
             <!-- (11) Hb  g/dL -->
             <div class="form-group">
-                <label for="hb">Hb <span class="unit-label">(g/dL)</span>:</label>
-                <select id="hb" name="hb">
-                    <option value="<7.5" {% if responses.get('hb') == '<7.5' %}selected{% endif %}>&lt;7.5</option>
-                    <option value="7.5-9" {% if responses.get('hb') == '7.5-9' %}selected{% endif %}>7.5-9</option>
-                    <option value="9-10" {% if responses.get('hb') == '9-10' %}selected{% endif %}>9-10</option>
-                    <option value="10-12" {% if responses.get('hb') == '10-12' %}selected{% endif %}>10-12</option>
-                    <option value=">12" {% if responses.get('hb') == '>12' %}selected{% endif %}>&gt;12</option>
-                </select>
+              <label for="hb">Hb <span class="unit-label">(g/dL)</span>:</label>
+              <select id="hb" name="hb">
+                <option value=">12" {% if responses.get('hb') == '>12' %}selected{% endif %}>&gt;12</option>
+                <option value="10-12" {% if responses.get('hb') == '10-12' %}selected{% endif %}>10-12</option>
+                <option value="9-10" {% if responses.get('hb') == '9-10' %}selected{% endif %}>9-10</option>
+                <option value="7.5-9" {% if responses.get('hb') == '7.5-9' %}selected{% endif %}>7.5-9</option>
+                <option value="<7.5" {% if responses.get('hb') == '<7.5' %}selected{% endif %}>&lt;7.5</option>
+              </select>
             </div>
-
+             
             <!-- (12) WBC -->
             <div class="form-group">
-                <label for="wbc">WBC <span class="unit-label">(10³/µL)</span>:</label>
-                <select id="wbc" name="wbc">
-                    <option value="<2500" {% if responses.get('wbc') == '<2500' %}selected{% endif %}>&lt;2500</option>
-                    <option value="2500-3000" {% if responses.get('wbc') == '2500-3000' %}selected{% endif %}>2500-3000</option>
-                    <option value="3000-4000" {% if responses.get('wbc') == '3000-4000' %}selected{% endif %}>3000-4000</option>
-                    <option value=">4000" {% if responses.get('wbc') == '>4000' %}selected{% endif %}>&gt;4000</option>
-                </select>
+              <label for="wbc">WBC <span class="unit-label">(10³/µL)</span>:</label>
+              <select id="wbc" name="wbc">
+                <option value=">4000" {% if responses.get('wbc') == '>4000' %}selected{% endif %}>&gt;4000</option>
+                <option value="3000-4000" {% if responses.get('wbc') == '3000-4000' %}selected{% endif %}>3000-4000</option>
+                <option value="2500-3000" {% if responses.get('wbc') == '2500-3000' %}selected{% endif %}>2500-3000</option>
+                <option value="<2500" {% if responses.get('wbc') == '<2500' %}selected{% endif %}>&lt;2500</option>
+              </select>
             </div>
-
+             
             <!-- (13) Neutrophils -->
             <div class="form-group">
-                <label for="neutrophils">Neutrophils <span class="unit-label">(1/µL)</span>:</label>
-                <select id="neutrophils" name="neutrophils">
-                    <option value="<1000" {% if responses.get('neutrophils') == '<1000' %}selected{% endif %}>&lt;1000</option>
-                    <option value="1000-1500" {% if responses.get('neutrophils') == '1000-1500' %}selected{% endif %}>1000-1500</option>
-                    <option value="1500-2500" {% if responses.get('neutrophils') == '1500-2500' %}selected{% endif %}>1500-2500</option>
-                    <option value=">2500" {% if responses.get('neutrophils') == '>2500' %}selected{% endif %}>&gt;2500</option>
-                </select>
+              <label for="neutrophils">Neutrophils <span class="unit-label">(1/µL)</span>:</label>
+              <select id="neutrophils" name="neutrophils">
+                <option value=">2500" {% if responses.get('neutrophils') == '>2500' %}selected{% endif %}>&gt;2500</option>
+                <option value="1500-2500" {% if responses.get('neutrophils') == '1500-2500' %}selected{% endif %}>1500-2500</option>
+                <option value="1000-1500" {% if responses.get('neutrophils') == '1000-1500' %}selected{% endif %}>1000-1500</option>
+                <option value="<1000" {% if responses.get('neutrophils') == '<1000' %}selected{% endif %}>&lt;1000</option>
+              </select>
             </div>
-
+             
             <!-- (14) Platelets cells/µL-->
             <div class="form-group">
-                <label for="platelets">Platelets <span class="unit-label">(cells/µL)</span>:</label>
-                <select id="platelets" name="platelets">
-                    <option value="<30.000" {% if responses.get('platelets') == '<30.000' %}selected{% endif %}>&lt;30.000</option>
-                    <option value="30.000-60.000" {% if responses.get('platelets') == '30.000-60.000' %}selected{% endif %}>30.000-60.000</option>
-                    <option value="60.000-75.000" {% if responses.get('platelets') == '60.000-75.000' %}selected{% endif %}>60.000-75.000</option>
-                    <option value="75.000-80.000" {% if responses.get('platelets') == '75.000-80.000' %}selected{% endif %}>75.000-80.000</option>
-                    <option value="80.000-100.000" {% if responses.get('platelets') == '80.000-100.000' %}selected{% endif %}>80.000-100.000</option>
-                    <option value="100.000-150.000" {% if responses.get('platelets') == '100.000-150.000' %}selected{% endif %}>100.000-150.000</option>
-                    <option value=">150.000" {% if responses.get('platelets') == '>150.000' %}selected{% endif %}>&gt;150.000</option>
-                </select>
+              <label for="platelets">Platelets <span class="unit-label">(cells/µL)</span>:</label>
+              <select id="platelets" name="platelets">
+                <option value=">150.000" {% if responses.get('platelets') == '>150.000' %}selected{% endif %}>&gt;150.000</option>
+                <option value="100.000-150.000" {% if responses.get('platelets') == '100.000-150.000' %}selected{% endif %}>100.000-150.000</option>
+                <option value="80.000-100.000" {% if responses.get('platelets') == '80.000-100.000' %}selected{% endif %}>80.000-100.000</option>
+                <option value="75.000-80.000" {% if responses.get('platelets') == '75.000-80.000' %}selected{% endif %}>75.000-80.000</option>
+                <option value="60.000-75.000" {% if responses.get('platelets') == '60.000-75.000' %}selected{% endif %}>60.000-75.000</option>
+                <option value="30.000-60.000" {% if responses.get('platelets') == '30.000-60.000' %}selected{% endif %}>30.000-60.000</option>
+                <option value="<30.000" {% if responses.get('platelets') == '<30.000' %}selected{% endif %}>&lt;30.000</option>
+              </select>
             </div>
 
             <!-- (16) Bilirubin -->

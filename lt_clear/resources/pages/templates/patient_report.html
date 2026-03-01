@@ -6,64 +6,171 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-<div class="card-header">
-        LT-CLEAR
-</div>
+  <div class="card-header">
+        <strong>LT-CLEAR</strong>	Liver Transplantation for Colorectal Liver Metastases Eligibility Assessment for Referral
+  </div>
+
   <div class="container report-container">
-        <h1>Patient Report<br> </h1>
+    <h1>Patient Report</h1>
+
+    {# optional banner(s) #}
+    {% if success_message %}
+      <div class="success-message">
+        {{ success_message }}
+      </div>
+    {% endif %}
+
+    <div class="card">
       <div class="card-body">
+
+        {# ============================================================
+           PATIENT QUESTIONNAIRE SUMMARY (Field + Actual value)
+           ============================================================ #}
         <div class="card-header">
           Patient informations:
-        </div>          <dl>
-            <div class="report-section">
-
-              {% for field_info in fields_data %}
-              <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                <dt style="font-weight: bold; margin-right: 5px; margin: 0;">{{ field_info.name.replace('_', ' ').title() }}:</dt>
-                <dd style="margin-left: 10px; margin: 0;">{{ responses.get(field_info.name, 'N/A') }}</dd>
-              </div>
-            {% endfor %}
-            
-          </dl>
         </div>
-        <!-- Matched Protocols Section -->
-        <div class="report-section">
 
-          {% if matched_protocols and matched_protocols != [('No protocols are adoptable for the patient.', '')] %}
-          {% if success_message %}
-            <div class="success-message">
-              {{ success_message }}
-            </div>
-          {% endif %}
-          <div class="card-header">
-            The patient <strong>can be included</strong> in the following protocols:
+        <div class="failed-grid">
+          <div class="failed-row header">
+            <div class="failed-cell">Field</div>
+            <div class="failed-cell">Actual value</div>
           </div>
-          <ul class="protocol-result">
-            {% for protocol, details in matched_protocols %}
-              <li>
-                <p class="protocol-name">{{ protocol }}</p>
-                {% if details %}
-                  <ul class="protocol-details">
-                    {% for detail in details %}
-                      <li>* {{ detail|urlize }}</li>
-                    {% endfor %}
-                  </ul>
+
+          {% for field_info in fields_data %}
+            {% set v = responses.get(field_info.name) %}
+            <div class="failed-row">
+              <div class="failed-cell">{{ field_info.label }}</div>
+              <div class="failed-cell">
+                {% if v is not none and v != '' %}
+                  {{ v }}
+                {% else %}
+                  Not available
                 {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>The patient <strong>cannot be included</strong> in any protocols.</p>
-        {% endif %}
-      </div>
-    </div>
-        <div class="buttons">
-          <a href="{{ url_for('restart') }}" class="button">Restart: New Patient</a>
+              </div>
+            </div>
+          {% endfor %}
         </div>
+
+        {# ============================================================
+           INCLUDED PROTOCOLS
+           ============================================================ #}
+        <div class="report-section" style="margin-top: 25px;">
+          {# sentinel used by backend when there are no adoptable protocols #}
+          {% set NO_MATCH = [("No protocols are adoptable for the patient.", [])] %}
+
+          {% if matched_protocols and matched_protocols != NO_MATCH %}
+
+            <div class="card-header">
+              The patient <strong>can be included</strong> in the following protocols:
+            </div>
+
+            <ul class="protocol-result">
+              {% for item in matched_protocols %}
+
+                {# normalize: name + warnings list #}
+                {% set proto_name = none %}
+                {% set warnings_list = [] %}
+                {% set proto_obj = none %}
+
+                {% if item is sequence and (item|length) == 2 %}
+                  {# tuple/list case: (name, details) #}
+                  {% set proto_name = item[0] %}
+                  {% set warnings_list = item[1] if item[1] else [] %}
+                {% else %}
+                  {# object/dict case #}
+                  {% set proto_obj = item %}
+                  {% set proto_name = proto_obj.protocol_name if proto_obj.protocol_name is defined else (proto_obj.name if proto_obj.name is defined else 'Protocol') %}
+                  {% set warnings_list = proto_obj.warnings if proto_obj.warnings is defined and proto_obj.warnings else [] %}
+                {% endif %}
+
+                {# ---- derive color + extract key lines (same as excluded html) ---- #}
+                {% set ns = namespace(
+                  color='missing',
+                  results_line=none,
+                  study_line=none,
+                  other_lines=[]
+                ) %}
+
+                {% if warnings_list %}
+                  {% for w in warnings_list %}
+                    {% set wl = w|lower %}
+
+                    {# results line #}
+                    {% if ('results availability:' in wl) or (wl.startswith('results') and ':' in wl) %}
+                      {% if ns.results_line is none %}
+                        {% set ns.results_line = w %}
+                      {% endif %}
+                      {% if ('published' in wl) or ('publiched' in wl) %}
+                        {% set ns.color = 'published' %}
+                      {% else %}
+                        {% if ns.color != 'published' %}
+                          {% set ns.color = 'missing' %}
+                        {% endif %}
+                      {% endif %}
+
+                    {# study status line #}
+                    {% elif 'study status:' in wl %}
+                      {% if ns.study_line is none %}
+                        {% set ns.study_line = w %}
+                      {% else %}
+                        {% if (('recruiting' in wl) or ('rectruiting' in wl)) and ('concluded' in (ns.study_line|lower)) %}
+                          {% set ns.study_line = w %}
+                        {% endif %}
+                      {% endif %}
+
+                    {# any other warning/detail #}
+                    {% else %}
+                      {% set ns.other_lines = ns.other_lines + [w] %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+
+                <li>
+                  <p class="protocol-name{% if ns.color == 'published' %} flag-published{% else %} flag-missing{% endif %}">
+                    {{ proto_name }}
+                  </p>
+
+                  {% if warnings_list %}
+                    <ul class="protocol-details">
+                      <li class="status-row{% if ns.color == 'published' %} flag-published{% else %} flag-missing{% endif %}">
+                        {% if ns.results_line %}
+                          {{ ns.results_line }}
+                        {% else %}
+                          Results: not available
+                        {% endif %}
+
+                        {% if ns.study_line %}
+                          <br>{{ ns.study_line }}
+                        {% endif %}
+                      </li>
+
+                      {% for w in ns.other_lines %}
+                        <li>{{ w|urlize }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+
+                </li>
+
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="no-match-message">No protocols are adoptable for the patient.</div>
+          {% endif %}
+        </div>
+
       </div>
     </div>
-    <footer>
-      2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
-    </footer>
+
+    <div class="buttons">
+      <a href="{{ url_for('home') }}" class="button">Back to home</a>
+      <a href="{{ url_for('restart') }}" class="button">New patient</a>
+    </div>
+  </div>
+
+  <footer>
+    2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+  </footer>
 </body>
 </html>
+

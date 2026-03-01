@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Results: Excluded Protocols</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+  <div class="card-header">
+        <strong>LT-CLEAR</strong>	Liver Transplantation for Colorectal Liver Metastases Eligibility Assessment for Referral
+  </div>
+
+  <div class="container">
+    <h1>Results: Excluded Protocols</h1>
+
+    {% if excluded_message %}
+      <div class="excluded-message">{{ excluded_message }}</div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-body">
+
+        <div class="card-header">
+          The patient <strong>can NOT be included</strong> in the following protocols:
+        </div>
+
+        {% if excluded_protocols %}
+          <ul class="protocol-result">
+            {% for p in excluded_protocols %}
+
+              {# ============================================================
+                 LOGIC:
+                 - Color (green/yellow) from Results (Published vs not available)
+                 ============================================================ #}
+
+              {# ns.color: 'published' | 'missing' #}
+              {% set ns = namespace(
+                color='missing',
+                results_line=none,
+                study_line=none,
+                other_lines=[]
+              ) %}
+
+              {% if p.warnings %}
+                {% for w in p.warnings %}
+                  {% set wl = w|lower %}
+
+                  {# --- results line --- #}
+                  {% if ('results availability:' in wl) or (wl.startswith('results') and ':' in wl) %}
+                    {% if ns.results_line is none %}
+                      {% set ns.results_line = w %}
+                    {% endif %}
+                    {% if ('published' in wl) or ('publiched' in wl) %}
+                      {% set ns.color = 'published' %}
+                    {% else %}
+                      {# keep missing unless we already saw published #}
+                      {% if ns.color != 'published' %}
+                        {% set ns.color = 'missing' %}
+                      {% endif %}
+                    {% endif %}
+
+                  {# --- study status line --- #}
+                  {% elif 'study status:' in wl %}
+                    {# if both appear, prefer Recruiting over Concluded #}
+                    {% if ns.study_line is none %}
+                      {% set ns.study_line = w %}
+                    {% else %}
+                      {% if (('recruiting' in wl) or ('rectruiting' in wl)) and ('concluded' in (ns.study_line|lower)) %}
+                        {% set ns.study_line = w %}
+                      {% endif %}
+                    {% endif %}
+
+                  {# --- anything else --- #}
+                  {% else %}
+                    {% set ns.other_lines = ns.other_lines + [w] %}
+                  {% endif %}
+
+                {% endfor %}
+              {% endif %}
+
+              <li>
+                {# Protocol title #}
+                <p class="protocol-name{% if ns.color == 'published' %} flag-published{% else %} flag-missing{% endif %}">
+                  {{ p.protocol_name }}
+                </p>
+
+                {% if p.warnings %}
+                  <ul class="protocol-details">
+
+                    {# Single colored box #}
+                    <li class="status-row{% if ns.color == 'published' %} flag-published{% else %} flag-missing{% endif %}">
+                      {% if ns.results_line %}
+                        {{ ns.results_line }}
+                      {% else %}
+                        Results: not available
+                      {% endif %}
+
+                      {% if ns.study_line %}
+                        <br>{{ ns.study_line }}
+                      {% endif %}
+                    </li>
+
+                    {# Other warnings as normal rows #}
+                    {% for w in ns.other_lines %}
+                      <li>{{ w|urlize }}</li>
+                    {% endfor %}
+
+                  </ul>
+                {% else %}
+                  <div class="protocol-details"><em>No warnings.</em></div>
+                {% endif %}
+
+                {% if p.failed %}
+                  <div style="margin-top:20px;"><strong>Conditions failed:</strong></div>
+
+                  <div class="failed-grid">
+                    <div class="failed-row header">
+                      <div class="failed-cell">Field</div>
+                      <div class="failed-cell">Inclusion parameter</div>
+                      <div class="failed-cell">Actual value</div>
+                    </div>
+
+                    {% for fc in p.failed %}
+                      {% if fc['fields'] %}
+                        {% for fname in fc['fields'] %}
+                          {% set idx = loop.index0 %}
+
+                          {# actual value (patient) aligned with the idx-th field #}
+                          {% set v = (
+                            fc['values'][idx]
+                            if (fc['values'] is defined and (fc['values']|length) > idx)
+                            else None
+                          ) %}
+
+                          {# protocol inclusion parameter (per field): fc.requirements[idx]
+                             fallback to query-level condition_key if missing #}
+                          {% set req = (
+                            fc['requirements'][idx]
+                            if (fc['requirements'] is defined and (fc['requirements']|length) > idx)
+                            else fc['condition_key']
+                          ) %}
+
+                          <div class="failed-row">
+                            <div class="failed-cell">
+                              {{ field_labels.get(fname, fname.replace('_', ' ').title()) }}
+                            </div>
+
+                            <div class="failed-cell">
+                              {% if req is not none and req != '' %}
+                                {{ req }}
+                              {% else %}
+                                &mdash;
+                              {% endif %}
+                            </div>
+
+                            <div class="failed-cell">
+                              {% if v is not none and v != '' %}
+                                {{ v }}
+                              {% else %}
+                                Not available
+                              {% endif %}
+                            </div>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </li>
+
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>The patient <strong>can be included</strong> in all protocols (no exclusions).</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+    <div class="buttons">
+      <a href="{{ url_for('results_page') }}" class="button">Back to results</a>
+      <a href="{{ url_for('patient_report') }}" class="button">Open patient report</a>
+      <a href="{{ url_for('restart') }}" class="button">New patient</a>
+    </div>
+  </div>
+
+  <footer>
+    2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
+  </footer>
+</body>
+</html>

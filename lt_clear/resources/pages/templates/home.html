@@ -6,57 +6,102 @@
   <title>Home - LT-CLEAR</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
+
 <body>
-  <div class="card-header">
-    LT-CLEAR
-  </div>
-  <div class="container">
+
+  <!-- Top brand bar -->
+  <header class="card-header brandbar">
+    <div class="brand">
+      <span class="brand-title">LT-CLEAR</span>
+      <span class="brand-sep">•</span>
+      <span class="brand-subtitle">Eligibility Tool</span>
+    </div>
+  </header>
+
+  <main id="main" class="container">
     <div class="card">
-      <div class="card-header">
-        LT-CLEAR <span class="text-muted">Eligibility Tool</span>
-      </div>
       <div class="card-body">
-        <h1 class="text-muted d-block" style="font-family:'Ubuntu','Inter','Source Sans 3','Public Sans','IBM Plex Sans','Noto Sans','Open Sans','DejaVu Sans','Liberation Sans',sans-serif; font-weight:500; letter-spacing:.2px;">
-  Liver Transplantation for Colorectal Liver Metastases<br>Eligibility Assessment for Referral (LT-CLEAR)
-	</h1>
 
-	<div class="description-block review-text">
-          <p>
-            Liver transplantation (LT) for unresectable colorectal liver metastases (uCRLM) has shown good results in recent trials, and the field is rapidly expanding with new studies. We aimed to develop a practical tool to select patients who could benefit from transplantation.
-          </p>
-          <p>
-            The LT-CLEAR tool is based on a systematic review of all protocols for LT in uCRLM. Eligible studies included published and ongoing trials. The primary aims were to identify (a) inclusion criteria and (b) exclusion criteria for LT.
-          </p>
-          <p style="font-weight: 300;">
-          Out of 27 studies, the majority were ongoing, while 8 (29.6%) had published results.<br>
-Criteria addressed patient status, primary cancer, extent of metastatic disease, systemic therapy, and disease trend.<br>
-Radical resection of the primary tumor was required in 52% of protocols, while patients could be excluded for inadequate margins (11%), advanced T (22%) or N (19%) stage.<br>
-Biological exclusion criteria included BRAF mutation (52%), microsatellite instability (22%), and RAS mutation (7%).<br>
-Hepatic lesion size was considered in 33% of trials, while lesion number in only 4%.<br>
-Extrahepatic disease was not admissible in 67% of trials, whereas 26% accepted resectable lung lesions.<br>
-Systemic therapy was mandatory in 93% of protocols, with disease stability (67%) or partial response (11%) required in most.
-</p>
-        </div>
+        <!-- HERO -->
+        <section class="hero">
+          <h1 class="hero-title">
+            Liver Transplantation for Colorectal Liver Metastases<br>
+            Eligibility Assessment for Referral
+          </h1>
 
-        <div class="description-block">
-        <h2 class="text-muted d-block" style="font-family:'Ubuntu','Inter','Source Sans 3','Public Sans','IBM Plex Sans','Noto Sans','Open Sans','DejaVu Sans','Liberation Sans',sans-serif; font-weight:500; letter-spacing:.2px;">
-		Find your protocol:</h2>
-          <p>
-            This tool was developed for clinicians to determine whether their patient can be waitlisted according to a published trial or enrolled in an ongoing study, thereby promoting broader consideration of liver transplantation as a therapeutic option for colorectal liver metastases.
-          </p>
-          <p>
-            Enter patient information and find out if he/she would be eligible in a liver transplantation protocol for colorectal liver metastases.
-          </p>
-        </div>
+          <!-- callout box (stat-like) -->
+          <div class="hero-callout">
+            Enter patient data and check eligibility against published trials and ongoing study protocols
+            for liver transplantation in unresectable colorectal liver metastases (uCRLM).
+          </div>
 
-        <div class="buttons">
-          <a href="{{ url_for('section1') }}" class="button start-program">Start Program</a>
-        </div>
+          <!-- stats: only 2 columns -->
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-kpi">26</div>
+              <div class="stat-label">studies included</div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-kpi">8 (29.6%)</div>
+              <div class="stat-label">with published results</div>
+            </div>
+          </div>
+
+          <div class="note">
+            This tool supports protocol screening and reporting. It does not provide medical advice or replace clinical judgment.
+          </div>
+        </section>
+
+        <!-- WHAT IT DOES -->
+        <section class="home-section first-section">
+          <h2>What this tool does</h2>
+          <ol class="steps">
+            <li>Collects structured patient and disease information.</li>
+            <li>Applies protocol-specific inclusion/exclusion criteria from published and ongoing studies.</li>
+            <li>Returns adoptable protocols and a transparent report of failed criteria for excluded protocols.</li>
+          </ol>
+        </section>
+
+        <!-- SYSTEMATIC REVIEW SUMMARY -->
+        <section class="home-section">
+          <h2>Systematic review summary</h2>
+
+          <div class="evidence-block">
+            <p>
+              Twenty-six studies were included; most were ongoing, and eight (29.6%) had published results. Eligibility criteria mainly addressed patient status,
+              primary-tumor features, extent of metastatic disease, systemic therapy, and disease trend.
+            </p>
+            <p>
+              Radical surgery of the primary tumor was required in 54% of protocols, while patients could be excluded for inadequate margins (12%),
+              advanced T stage (23%), or advanced N stage (15%).
+            </p>
+            <p>
+              Biological exclusion criteria included BRAF mutations in 54% of protocols, microsatellite instability in 23%, and RAS mutations in 8%.
+              The number of hepatic lesions was never considered as a selection factor, whereas lesion dimensions were considered in 31% of trials.
+            </p>
+            <p>
+              Extrahepatic disease was not admissible in 65% of trials, while 27% accepted resectable lung lesions.
+              Systemic therapy was mandatory in 92% of protocols, most commonly requiring disease stability (73%) and less frequently partial response (12%).
+            </p>
+          </div>
+        </section>
+
+
+        <section class="home-section cta-bottom">
+          <div class="buttons">
+            <a href="{{ url_for('section1') }}" class="button start-program">Start Program</a>
+          </div>
+        </section>
+
       </div>
     </div>
-  </div>
+  </main>
+
   <footer>
     2025 | Scuola Normale Superiore &amp; University of Roma Tor Vergata
   </footer>
+
 </body>
 </html>
+
