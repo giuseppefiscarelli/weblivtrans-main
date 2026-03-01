@@ -24,16 +24,15 @@ if [[ ! -e $venv_path ]]; then
     echo 'Virtual environment not found, installing it'
     mkdir ${venv_path}
     ${py_cmd} -m venv "${venv_path}"
-    source "${venv_path}/bin/activate"
-    pip install $(dirname $(realpath $0))/..
-else
-    source "${venv_path}/bin/activate"
 fi
+source "${venv_path}/bin/activate"
+# Always reinstall the local package to pick up updates after git pull
+pip install -U "$(dirname "$(realpath "$0")")/.."
 
 # Run server
 # This is a dirty way to keep the server in the foreground and open the URL
 #   after the server has been run.
 # If the server is run first and sent in the background, this does not seem to
 #   work, the page is black.
-(sleep 3; open "http://127.0.0.1:5000") &
+(sleep 3; if command -v xdg-open > /dev/null 2>&1; then xdg-open "http://127.0.0.1:5000"; elif command -v open > /dev/null 2>&1; then open "http://127.0.0.1:5000"; fi) &
 ${venv_path}/bin/lt_clear_app
