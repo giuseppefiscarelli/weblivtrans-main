@@ -1,6 +1,21 @@
 #!/bin/bash
 
 venv_path="${HOME}/venv-lt_clear"
+detach=0
+log_file=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --detach|--daemon)
+            detach=1
+            ;;
+        --log)
+            log_file="$2"
+            shift
+            ;;
+    esac
+    shift
+done
 
 if command -v python3 > /dev/null 2>&1; then
     py_cmd='python3'
@@ -34,5 +49,17 @@ pip install -U "$(dirname "$(realpath "$0")")/.."
 #   after the server has been run.
 # If the server is run first and sent in the background, this does not seem to
 #   work, the page is black.
+if [[ ${detach} -eq 1 ]]; then
+    # Detach from terminal to avoid SIGHUP when the console closes.
+    trap '' HUP
+    if [[ -n "${log_file}" ]]; then
+        nohup "${venv_path}/bin/lt_clear_app" >> "${log_file}" 2>&1 &
+    else
+        nohup "${venv_path}/bin/lt_clear_app" >/dev/null 2>&1 &
+    fi
+    echo $! > "${venv_path}/lt_clear_app.pid"
+    exit 0
+fi
+
 (sleep 3; if command -v xdg-open > /dev/null 2>&1; then xdg-open "http://127.0.0.1:5000"; elif command -v open > /dev/null 2>&1; then open "http://127.0.0.1:5000"; fi) &
-${venv_path}/bin/lt_clear_app
+"${venv_path}/bin/lt_clear_app"
